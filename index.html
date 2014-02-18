@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="skyApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SkyDrive</title>
+    <link href="bootstarp/css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-controller="SkyListCtrl">
+<div id="signin"></div>
+<div id="id" class="container" >
+    <div class="panel panel-primary container" ng-if="rootFiles!=null && folderList!=null">
+        <h1>Root</h1>
+        <div class="panel panel-primary" ng-repeat="folder in folderList">
+            <div class="panel-heading panel-title">{{folder.name}}</div>
+            <div class="panel-body" ng-repeat="file in folder.child">
+                {{file.name}}
+            </div>
+        </div>
+        <div class="panel panel-primary panel-body" ng-repeat="file in rootFiles">{{file.name}}</div>
+    </div>
+</div>
+<script src="http://js.live.net/v5.0/wl.js"></script>
+<script src="lib/jquery.min.js"></script>
+<script src="lib/angular.js" ></script>
+<script src="js/skyDrive.js"></script>
+<script src="bootstarp/js/bootstrap.min.js"></script>
+</body>
+</html>
