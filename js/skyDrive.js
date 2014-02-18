@@ -3,19 +3,7 @@
  */
 
 
-function MyLogger() {
-    var logInternal = function(msg){
-        console.log(msg);
-    };
 
-    return {
-        log: logInternal
-    }
-}
-
-var logger = new MyLogger();
-
-logger.log("message from myLogger");
 
 (function(global){
 
