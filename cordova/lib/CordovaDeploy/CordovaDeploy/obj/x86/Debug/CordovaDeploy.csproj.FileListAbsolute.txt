@@ -1,0 +1,6 @@
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\bin\Debug\CordovaDeploy.exe.config
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\bin\Debug\CordovaDeploy.exe
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\bin\Debug\CordovaDeploy.pdb
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\obj\x86\Debug\CordovaDeploy.csprojResolveAssemblyReference.cache
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\obj\x86\Debug\CordovaDeploy.exe
+D:\TestProjects\skyDrive\platforms\wp8\cordova\lib\CordovaDeploy\CordovaDeploy\obj\x86\Debug\CordovaDeploy.pdb
