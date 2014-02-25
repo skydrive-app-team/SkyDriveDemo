@@ -22,23 +22,87 @@ function SkyDriveManager() {
             }
         },
         accessToken = getAccessTokenFromURL(),
-        USER_INFO_URL = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken,
-        FILES_URL_FOR_DIRECTORY = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken,
-        SING_OUT_URL = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=https://login.live.com/oauth20_desktop.srf";
+        userInfoUrl ,
+        filesUrlForDirectory,
+        singOutUrl ,
+        clientId ,
+        redirectUri,
+        http,
+        q;
 
+    function generateURLs(){
+        userInfoUrl = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
+        filesUrlForDirectory = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
+        singOutUrl = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
+    }
 
+    generateURLs();
 
     return {
-        userInfoURL: USER_INFO_URL,
-        accessToken: accessToken,
+        setAccessToken: function(aToken){
+            accessToken = aToken;
+            generateURLs();
+        },
+
+        getAccessToken:function(){
+            return accessToken;
+        },
+
+        getUserInfoURL: function(){
+            return userInfoUrl;
+        },
+
+        getClientId: function(){
+            return clientId;
+        },
+
+        steClientId: function(cliId){
+            clientId = cliId;
+            generateURLs();
+        },
+
+        getRedirectUri: function(){
+            return redirectUri;
+        },
+
+        setRedirectUri: function(redUri){
+            redirectUri = redUri;
+            generateURLs();
+        },
 
         signOut: function(){
-            location.href=SING_OUT_URL;
+            location.href=singOutUrl;
             //location.href="https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html";
         },
 
-        getFilesUrlForDirectory: function(folder){
-            return FILES_URL_FOR_DIRECTORY.replace("%folderID%", folder);
+        onControllerCreated: function ($http, $q){
+            http = $http;
+            q = $q;
+        },
+
+        loadFilesData : function(request){
+            var deferred = q.defer();
+            http({
+                    method: 'GET',
+                    url:  filesUrlForDirectory.replace("%folderID%", request)}
+            ).success( function (response) {
+                    deferred.resolve( response.data);
+                });
+            return deferred.promise;
+        },
+
+        loadUserInfo: function(){
+            var deferred = q.defer();
+            http({
+                    method: 'GET',
+                    url: userInfoUrl }
+            ).success(
+                function (userInfo) {
+                    deferred.resolve(userInfo);
+                }
+            );
+            return deferred.promise;
         }
     }
 }
+

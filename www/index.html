@@ -14,18 +14,22 @@
     </head>
     <body ng-controller="SkyListCtrl">
     <div class="container">
-
-        <h1  ng-if="userName!=null"  class="pull-right" >{{userName}}
-            <a href="javascript:signOut();" class="btn btn-primary btn-lg" role="button">Sign out</a>
-        </h1>
+        <div>
+            <h1  ng-if="userName!=null"  class="pull-right" >{{userName}}
+                <a href="javascript:signOut();" class="btn btn-primary btn-lg" role="button">Sign out</a>
+            </h1>
+        </div>
     </div>
         <div id="id" class="container" >
-            <div class="panel panel-primary container" ng-if="filesAndFolders!=null">
+            <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
+                <!--ng-if="filesAndFolders!=null"-->
                 <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr;Back</a> </h1>
-                <div class="panel panel-primary" ng-repeat="folder in filesAndFolders.folders">
-                    <div ng-click="displayFolder(folder.name)" class="panel-heading panel-title" role="button">{{folder.name}}</div>
+                <div  ng-repeat="obj in filesAndFolders " >
+                    <div class="panel panel-primary" ng-if="obj.type =='folder'">
+                        <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
+                    </div>
+                    <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >{{obj.name}}</div>
                 </div>
-                <div class="panel panel-primary panel-body" ng-repeat="file in filesAndFolders.files">{{file.name}}</div>
             </div>
         </div>
 

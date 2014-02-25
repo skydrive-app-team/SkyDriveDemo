@@ -16,124 +16,94 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
+var app;
+app = {
     skyDriveManager: null,
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         this.bindEvents();
         /*console.log = function(msg) {
-            window.external.notify(msg);
-        }*/
+         window.external.notify(msg);
+         }*/
         this.init();
     },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
+    bindEvents: function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
+    onDeviceReady: function () {
     },
 
-    init: function(){
+    init: function () {
         var ROOT_DIRECTORY = "me/skydrive/files",
-            NAME_APP = 'skyApp',
-            NAME_CONTROL = 'SkyListCtrl',
-            TYPE_FOLDER = 'folder',
+            APP_NAME = 'skyApp',
+            CONTROL_NAME = 'SkyListCtrl',
             ROOT = 'Root',
+            CLIENT_ID = "0000000048113444",
+            REDIRECT_URI = "https://login.live.com/oauth20_desktop.srf",
 
-            skyApp = angular.module(NAME_APP, []),
-            skyDriveManager = new SkyDriveManager(),
+            skyApp = angular.module(APP_NAME, []),
+            skyDriveManager = new SkyDriveManager();
 
-            filterFolderData = function(data){
-                var returnData = {files: [], folders: []};
-                data.forEach(
-                    function(obj){
-                        if (obj.type === TYPE_FOLDER){
-                            returnData.folders.push(obj);
-                        } else{
-                            returnData.files.push(obj);
-                        }
-                    });
-                return returnData;
-            };
+        skyDriveManager.steClientId(CLIENT_ID);
+        skyDriveManager.setRedirectUri(REDIRECT_URI);
 
-        skyApp.controller(NAME_CONTROL, function ($scope, $http, $q){
-            var directoryId = [];
+        skyApp.controller(CONTROL_NAME, function ($scope, $http, $q) {
+                skyDriveManager.onControllerCreated($http, $q);
 
-            $scope.directory = ROOT;
+                var directoryId = [];
 
-            var loadFolder = function(request){
-                var deferred = $q.defer();
+                $scope.directory = ROOT;
 
-                $http({
-                        method: 'GET',
-                        url: skyDriveManager.getFilesUrlForDirectory(request)}
-                ).success( function (response) {
-                        deferred.resolve( filterFolderData(response.data));
-                    });
-                return deferred.promise;
-            };
+                $scope.displayFolder = function (folderName) {
+                    var folderId = $scope.filesAndFolders.filter(
+                        function (obj) {
+                            return obj.name === folderName;
+                        })[0].id;
 
-            $http({
-                    method: 'GET',
-                    url: skyDriveManager.userInfoURL }
-            ).success(
-                function (userInfo) {
-                    $scope.userName = userInfo.name;
-                }
-            );
-
-            $scope.displayFolder =  function (folderName){
-                var folderId = $scope.filesAndFolders.folders.filter(
-                    function(obj) {
-                        return obj.name == folderName
-                    })[0].id;
-
-                loadFolder(folderId+'/files')
-                    .then(
-                        function(data){
+                    skyDriveManager.loadFilesData(folderId + '/files')
+                        .then(
+                        function (data) {
                             $scope.filesAndFolders = data;
-                            $scope.directory += '/ '+folderName;
+                            $scope.directory += '/ ' + folderName;
                             directoryId.push(folderId);
                         }
                     );
-            };
+                };
 
-            $scope.toPreFolder = function(){
-                var dirArr = $scope.directory.split('/');
+                $scope.toPreFolder = function () {
+                    var dirArr = $scope.directory.split('/'),
+                        directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files': ROOT_DIRECTORY;
 
-                if(directoryId.length - 2 >= 0){
-                    loadFolder(directoryId[directoryId.length - 2] + '/files').then(
-                        function(data){
-                            $scope.filesAndFolders = data;
-                            directoryId.splice(directoryId.length - 1, 1);
-                            dirArr.splice(dirArr.length - 1, 1);
-                            $scope.directory = dirArr.join("/ ");
-                        }
-                    );
-                } else {
-                    loadFolder(ROOT_DIRECTORY).then(
-                        function(data){
-                            $scope.filesAndFolders = data;
-                            directoryId.splice(directoryId.length - 1, 1);
-                            dirArr.splice(dirArr.length - 1, 1);
-                            $scope.directory=dirArr.join("/ ");
-                        }
-                    );
-                }
-            };
+                        skyDriveManager.loadFilesData(directoryToLoad).then(
+                            function (data) {
+                                $scope.filesAndFolders = data;
+                                directoryId.splice(directoryId.length - 1, 1);
+                                dirArr.splice(dirArr.length - 1, 1);
+                                $scope.directory = dirArr.join("/ ");
+                            }
+                        );
+                };
 
-            loadFolder(ROOT_DIRECTORY).then(
-                function(data){
-                    $scope.filesAndFolders = data;
-                }
-            );
-        });
+                skyDriveManager.loadUserInfo().then(
+                    function (userInfo) {
+                        $scope.userName = userInfo.name;
+                    }
+                );
+
+                skyDriveManager.loadFilesData(ROOT_DIRECTORY).then(
+                    function (data) {
+                        $scope.filesAndFolders = data;
+                    }
+                );
+            }
+        );
     }
 };
