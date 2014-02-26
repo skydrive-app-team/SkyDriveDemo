@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="skyApp">
+<html lang="en" ng-app="app">
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
@@ -12,7 +12,7 @@
 
 
     </head>
-    <body ng-controller="SkyListCtrl">
+    <body ng-controller="ngOneDriveCtrl">
     <div class="container">
         <div>
             <h1  ng-if="userName!=null"  class="pull-right" >{{userName}}
@@ -39,9 +39,7 @@
         <script src="js/skyDrive.js"></script>
 
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
+        <script type="text/javascript" src="js/ngApp.js"></script>
+        <script type="text/javascript" src="js/ngOneDriveCtrl.js"></script>
     </body>
 </html>
