@@ -6,7 +6,17 @@
 
 
 function SkyDriveManager() {
-    var getAccessTokenFromURL = function(){
+    var ROOT_DIRECTORY = "me/skydrive/files",
+        accessToken,
+        userInfoUrl ,
+        filesUrlForDirectory,
+        singOutUrl ,
+        clientId ,
+        redirectUri,
+        http,
+        q,
+
+        getAccessTokenFromURL = function() {
             var hash = window.location.hash;
 
             hash = hash.substr(hash.indexOf('access_token='));
@@ -21,21 +31,15 @@ function SkyDriveManager() {
                 return hash;
             }
         },
-        accessToken = getAccessTokenFromURL(),
-        userInfoUrl ,
-        filesUrlForDirectory,
-        singOutUrl ,
-        clientId ,
-        redirectUri,
-        http,
-        q;
 
-    function generateURLs(){
-        userInfoUrl = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
-        filesUrlForDirectory = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
-        singOutUrl = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
-    }
+        generateURLs = function() {
+            userInfoUrl = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
+            filesUrlForDirectory = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
+            singOutUrl = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
+        };
 
+
+    accessToken = getAccessTokenFromURL();
     generateURLs();
 
     return {
@@ -56,7 +60,7 @@ function SkyDriveManager() {
             return clientId;
         },
 
-        steClientId: function(cliId){
+        setClientId: function(cliId){
             clientId = cliId;
             generateURLs();
         },
@@ -82,20 +86,23 @@ function SkyDriveManager() {
 
         loadFilesData : function(request){
             var deferred = q.defer();
+
             http({
-                    method: 'GET',
-                    url:  filesUrlForDirectory.replace("%folderID%", request)}
-            ).success( function (response) {
-                    deferred.resolve( response.data);
+                method: 'GET',
+                url:  filesUrlForDirectory.replace("%folderID%", request||ROOT_DIRECTORY)}
+            ).success(
+                function (response) {
+                    deferred.resolve(response.data);
                 });
+
             return deferred.promise;
         },
 
         loadUserInfo: function(){
             var deferred = q.defer();
             http({
-                    method: 'GET',
-                    url: userInfoUrl }
+                method: 'GET',
+                url: userInfoUrl }
             ).success(
                 function (userInfo) {
                     deferred.resolve(userInfo);

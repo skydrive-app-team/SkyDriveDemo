@@ -18,7 +18,6 @@
  */
 var app;
 app = {
-    skyDriveManager: null,
     // Application Constructor
     initialize: function () {
         this.bindEvents();
@@ -42,25 +41,24 @@ app = {
     },
 
     init: function () {
-        var ROOT_DIRECTORY = "me/skydrive/files",
-            APP_NAME = 'skyApp',
-            CONTROL_NAME = 'SkyListCtrl',
-            ROOT = 'Root',
+        var APP_NAME = 'skyApp',
+            CONTROLLER_NAME = 'SkyListCtrl',
+            ROOT_TITLE = 'Root',
             CLIENT_ID = "0000000048113444",
             REDIRECT_URI = "https://login.live.com/oauth20_desktop.srf",
 
             skyApp = angular.module(APP_NAME, []),
             skyDriveManager = new SkyDriveManager();
 
-        skyDriveManager.steClientId(CLIENT_ID);
+        skyDriveManager.setClientId(CLIENT_ID);
         skyDriveManager.setRedirectUri(REDIRECT_URI);
 
-        skyApp.controller(CONTROL_NAME, function ($scope, $http, $q) {
+        skyApp.controller(CONTROLLER_NAME, function ($scope, $http, $q) {
                 skyDriveManager.onControllerCreated($http, $q);
 
                 var directoryId = [];
 
-                $scope.directory = ROOT;
+                $scope.directory = ROOT_TITLE;
 
                 $scope.displayFolder = function (folderName) {
                     var folderId = $scope.filesAndFolders.filter(
@@ -80,12 +78,14 @@ app = {
 
                 $scope.toPreFolder = function () {
                     var dirArr = $scope.directory.split('/'),
-                        directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files': ROOT_DIRECTORY;
+                        directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files': null;
 
                         skyDriveManager.loadFilesData(directoryToLoad).then(
                             function (data) {
                                 $scope.filesAndFolders = data;
+
                                 directoryId.splice(directoryId.length - 1, 1);
+
                                 dirArr.splice(dirArr.length - 1, 1);
                                 $scope.directory = dirArr.join("/ ");
                             }
@@ -98,7 +98,7 @@ app = {
                     }
                 );
 
-                skyDriveManager.loadFilesData(ROOT_DIRECTORY).then(
+                skyDriveManager.loadFilesData().then(
                     function (data) {
                         $scope.filesAndFolders = data;
                     }
