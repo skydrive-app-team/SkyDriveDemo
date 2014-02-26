@@ -1,2 +1,6 @@
 /.idea/
 /*.config
+/Bin/
+/obj/
+/*.v11.suo
+/*.csproj.user
