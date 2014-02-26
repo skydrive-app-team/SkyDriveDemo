@@ -1,6 +1,7 @@
 /.idea/
 /*.config
-/Bin/
-/obj/
+Bin/
+obj/
 /*.v11.suo
 /*.csproj.user
+debug.log
