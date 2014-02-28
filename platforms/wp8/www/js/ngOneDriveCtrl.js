@@ -15,6 +15,13 @@
     // Point to the controller definition function.
     angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q', function ($scope, $http, $q) {
 
+        function getFilesByName(name){
+            return $scope.filesAndFolders.filter(
+                function (obj) {
+                    return obj.name === name;
+                })[0];
+        }
+
         var skyDriveManager = new SkyDriveManager();
         skyDriveManager.setClientId(CLIENT_ID);
         skyDriveManager.setRedirectUri(REDIRECT_URI);
@@ -26,16 +33,13 @@
         $scope.directory = ROOT_TITLE;
 
         $scope.displayFolder = function (folderName) {
-            var folderId = $scope.filesAndFolders.filter(
-                function (obj) {
-                    return obj.name === folderName;
-                })[0].id;
+            var folderId = getFilesByName(folderName).id;
 
             skyDriveManager.loadFilesData(folderId + '/files')
                 .then(
                 function (data) {
                     $scope.filesAndFolders = data;
-                    $scope.directory += '/ ' + folderName;
+                    $scope.directory += '/' + folderName;
                     directoryId.push(folderId);
                 }
             );
@@ -52,10 +56,29 @@
                     directoryId.splice(directoryId.length - 1, 1);
 
                     dirArr.splice(dirArr.length - 1, 1);
-                    $scope.directory = dirArr.join("/ ");
+                    $scope.directory = dirArr.join("/");
                 }
             );
         };
+
+        $scope.downloadFile = function(name){
+            /*var onSuccess = function(res){
+             //window.location=targetFile.fullPath;
+             console.log(targetFile.fullPath);
+             //cordova.exec(null, null, 'FileOpening', 'open', [targetFile.fullPath]);
+             //console.log('end');
+             //console.log( fileSystem.root.fullPath);
+             },
+             onError = function(res){
+             console.log('onError ');
+             },
+             onProgress = function(res){
+             console.log('progress ' + res);
+             };*/
+
+            skyDriveManager.downloadFile(getFilesByName(name).source, name , $scope.directory);
+
+        }
 
         skyDriveManager.loadUserInfo().then(
             function (userInfo) {

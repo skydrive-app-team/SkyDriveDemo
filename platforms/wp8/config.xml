@@ -6,6 +6,9 @@
     <feature name="File">
         <param name="wp-package" value="File" />
     </feature>
+    <feature name="FileOpening">
+      <param name="wp-package" value="FileOpening" />
+    </feature>
     <name>OneDriveDemoApp</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

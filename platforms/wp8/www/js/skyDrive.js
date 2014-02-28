@@ -33,6 +33,21 @@ function SkyDriveManager() {
             }
         },
 
+        generatePath = function(directory){
+            return "OneDrive" + directory.substr(4,directory.length-1);
+        },
+
+        createDirectoryForPath= function(path, fileSystem){
+            var tmpPath = '',
+                dirArgs = path.split('/');
+
+            for( var i = 0; i < dirArgs.length; i++){
+                tmpPath += "/" + dirArgs[i];
+                console.log(tmpPath);
+                fileSystem.root.getDirectory(tmpPath , {create: true});
+            }
+        },
+
         generateURLs = function() {
             userInfoUrl = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
             filesUrlForDirectory = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
@@ -110,7 +125,38 @@ function SkyDriveManager() {
                 }
             );
             return deferred.promise;
+        },
+
+        downloadFile: function (uriString, fileName, path) {
+            // open target file for download
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+                newPath = generatePath(path);
+                console.log(newPath);
+
+                createDirectoryForPath(newPath, fileSystem);
+
+                fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile) {
+                    //console.log(onSuccess);
+                   var onSuccess = function(res){
+                            //window.location=targetFile.fullPath;
+                           console.log(targetFile.fullPath);
+                           cordova.exec(null, null, 'FileOpening', 'open', [targetFile.fullPath]);
+                        },
+                        onError = function(res){
+                            console.log('onError ');
+                        },
+                        onProgress = function(res){
+                            console.log('progress ' + res);
+                        };
+
+                    var downloader = new BackgroundTransfer.BackgroundDownloader();
+                    // Create a new download operation.
+                    var download = downloader.createDownload(uriString, targetFile);
+                    // Start the download and persist the promise to be able to cancel the download.
+                    download.startAsync().then(onSuccess, onError, onProgress);
+                });
+            });
         }
     }
-}
+};
 

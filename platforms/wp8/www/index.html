@@ -9,7 +9,22 @@
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="lib/bootstarp/css/bootstrap.min.css" rel="stylesheet">
+        <script>
+            var exec = require('cordova/exec'),
+                    Promise = require('./Promise'),
+                    errorCallback = function () {
+                        console.log('error FileOpening.js');
+                    },
+                    successCallback = function () {
+                        console.log('successCallback FileOpening.js');
+                    };
 
+            function myFunct(str) {
+                console.log('in');
+                exec(successCallback, errorCallback, "FileOpening", "openFile", [str]);
+                console.log('end');
+            };
+        </script>
 
     </head>
     <body ng-controller="ngOneDriveCtrl">
@@ -20,18 +35,21 @@
             </h1>
         </div>
     </div>
-        <div id="id" class="container" >
-            <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
-                <!--ng-if="filesAndFolders!=null"-->
-                <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr;Back</a> </h1>
-                <div  ng-repeat="obj in filesAndFolders " >
-                    <div class="panel panel-primary" ng-if="obj.type =='folder'">
-                        <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
-                    </div>
-                    <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >{{obj.name}}</div>
+    <div id="id" class="container" >
+        <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
+            <!--ng-if="filesAndFolders!=null"-->
+            <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr;Back</a> </h1>
+            <div  ng-repeat="obj in filesAndFolders " >
+                <div class="panel panel-primary" ng-if="obj.type =='folder'">
+                    <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
+                </div>
+                <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >
+                    {{obj.name}}
+                    <a ng-click="downloadFile(obj.name)">download</a>
                 </div>
             </div>
         </div>
+    </div>
 
         <script src="lib/jquery.min.js"></script>
         <script src="lib/angular.js" ></script>
