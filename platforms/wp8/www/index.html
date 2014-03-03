@@ -45,7 +45,10 @@
                 </div>
                 <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >
                     {{obj.name}}
-                    <a ng-click="downloadFile(obj.name)">download</a>
+                    <a ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</a>
+                    <a ng-if="obj.state=='progress'" >{{obj.progress}}%</a>
+                    <a ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open</a>||
+                    <a ng-if="obj.state=='downloaded'"  ng-click="">reload</a>
                 </div>
             </div>
         </div>

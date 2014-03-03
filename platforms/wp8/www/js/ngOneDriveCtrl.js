@@ -13,22 +13,30 @@
     // Define the controller on the module.
     // Inject the dependencies.
     // Point to the controller definition function.
-    angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q', function ($scope, $http, $q) {
+    angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q' , function ($scope, $http, $q) {
 
-        function getFilesByName(name){
-            return $scope.filesAndFolders.filter(
-                function (obj) {
-                    return obj.name === name;
-                })[0];
-        }
+        var skyDriveManager = new SkyDriveManager(),
+            directoryId = [],
 
-        var skyDriveManager = new SkyDriveManager();
+            getFilesByName =  function(name){
+                return $scope.filesAndFolders.filter(
+                    function (obj) {
+                        return obj.name === name;
+                    })[0];
+            },
+
+            addDownloadState = function(data){
+                data.forEach(function(obj){
+                if(obj.type !== 'folder'){
+                    obj.state='notDownloaded';
+                }
+                });
+            };
+
         skyDriveManager.setClientId(CLIENT_ID);
         skyDriveManager.setRedirectUri(REDIRECT_URI);
         
         skyDriveManager.onControllerCreated($http, $q);
-
-        var directoryId = [];
 
         $scope.directory = ROOT_TITLE;
 
@@ -38,6 +46,7 @@
             skyDriveManager.loadFilesData(folderId + '/files')
                 .then(
                 function (data) {
+                    addDownloadState(data);
                     $scope.filesAndFolders = data;
                     $scope.directory += '/' + folderName;
                     directoryId.push(folderId);
@@ -51,6 +60,7 @@
 
             skyDriveManager.loadFilesData(directoryToLoad).then(
                 function (data) {
+                    addDownloadState(data);
                     $scope.filesAndFolders = data;
 
                     directoryId.splice(directoryId.length - 1, 1);
@@ -61,23 +71,33 @@
             );
         };
 
-        $scope.downloadFile = function(name){
-            /*var onSuccess = function(res){
-             //window.location=targetFile.fullPath;
-             console.log(targetFile.fullPath);
-             //cordova.exec(null, null, 'FileOpening', 'open', [targetFile.fullPath]);
-             //console.log('end');
-             //console.log( fileSystem.root.fullPath);
-             },
-             onError = function(res){
-             console.log('onError ');
-             },
-             onProgress = function(res){
-             console.log('progress ' + res);
-             };*/
+        $scope.openFile = function(file){
+            cordova.exec(null, null, 'FileOpening', 'open', [file.localPath]);
+        };
 
-            skyDriveManager.downloadFile(getFilesByName(name).source, name , $scope.directory);
-
+        $scope.downloadFile = function(file){
+           // $scope.display();
+            file.state = 'progress';
+            file.progress = "0";
+            var onSuccess = function(filePath){
+                    console.log('onSuccess ' + file.name);
+                    file.localPath = filePath;
+                    file.state = 'downloaded';
+                    $scope.$apply();
+                },
+                onError = function(res){
+                    console.log('onError '+res);
+                    obj.state = 'notDownloaded';
+                    $scope.apply();
+                },
+                onProgress = function(res){
+                    console.log('onProgress ' + file.name);
+                    file.state = 'progress';
+                    file.progress = res ;
+                    console.log('progress ' + file.progress);
+                    $scope.$apply();
+                };
+            skyDriveManager.downloadFile(file.source, file.name, $scope.directory,onSuccess,onError,onProgress);
         }
 
         skyDriveManager.loadUserInfo().then(
@@ -88,6 +108,7 @@
 
         skyDriveManager.loadFilesData().then(
             function (data) {
+                addDownloadState(data);
                 $scope.filesAndFolders = data;
             }
         );

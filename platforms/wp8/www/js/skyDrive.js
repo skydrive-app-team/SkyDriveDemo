@@ -43,7 +43,6 @@ function SkyDriveManager() {
 
             for( var i = 0; i < dirArgs.length; i++){
                 tmpPath += "/" + dirArgs[i];
-                console.log(tmpPath);
                 fileSystem.root.getDirectory(tmpPath , {create: true});
             }
         },
@@ -127,33 +126,23 @@ function SkyDriveManager() {
             return deferred.promise;
         },
 
-        downloadFile: function (uriString, fileName, path) {
+        downloadFile: function (uriString, fileName, path ,onSuccess , onError, onProgress) {
             // open target file for download
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
                 newPath = generatePath(path);
-                console.log(newPath);
+                //console.log(newPath);
 
                 createDirectoryForPath(newPath, fileSystem);
 
-                fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile) {
-                    //console.log(onSuccess);
-                   var onSuccess = function(res){
-                            //window.location=targetFile.fullPath;
-                           console.log(targetFile.fullPath);
-                           cordova.exec(null, null, 'FileOpening', 'open', [targetFile.fullPath]);
+                fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile){
+                    var onSuccessThis = function(res){
+                            onSuccess(targetFile.fullPath);
                         },
-                        onError = function(res){
-                            console.log('onError ');
-                        },
-                        onProgress = function(res){
-                            console.log('progress ' + res);
-                        };
-
-                    var downloader = new BackgroundTransfer.BackgroundDownloader();
-                    // Create a new download operation.
-                    var download = downloader.createDownload(uriString, targetFile);
+                        downloader = new BackgroundTransfer.BackgroundDownloader(),
+                        // Create a new download operation.
+                        download = downloader.createDownload(uriString, targetFile);
                     // Start the download and persist the promise to be able to cancel the download.
-                    download.startAsync().then(onSuccess, onError, onProgress);
+                    download.startAsync().then(onSuccessThis, onError, onProgress);
                 });
             });
         }
