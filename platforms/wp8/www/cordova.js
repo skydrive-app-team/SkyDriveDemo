@@ -36,8 +36,6 @@ var require,
         inProgressModules = {},
         SEPARATOR = ".";
 
-
-
     function build(module) {
         var factory = module.factory,
             localRequire = function (id) {

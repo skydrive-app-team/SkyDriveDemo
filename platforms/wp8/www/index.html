@@ -47,17 +47,17 @@
                     {{obj.name}}
                     <a ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</a>
                     <a ng-if="obj.state=='progress'" >{{obj.progress}}%</a>
-                    <a ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open</a>||
-                    <a ng-if="obj.state=='downloaded'"  ng-click="">reload</a>
+                    <a ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open |</a>
+                    <a ng-if="obj.state=='downloaded'"  ng-click="reload(obj)">| reload</a>
                 </div>
             </div>
         </div>
     </div>
-
         <script src="lib/jquery.min.js"></script>
         <script src="lib/angular.js" ></script>
         <script src="lib/bootstarp/js/bootstrap.min.js"></script>
         <script src="js/skyDrive.js"></script>
+        <script src="js/oneDriveDb.js"></script>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/ngApp.js"></script>

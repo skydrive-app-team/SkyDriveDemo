@@ -6,9 +6,11 @@ function DbManager (name){
         db,
 
         create = function(){
+            /*try{
             indexedDB.deleteDatabase(DB_NAME);
             console.log('db delete');
-
+            }catch (e){}
+            console.log('create');*/
             var idbRequest = indexedDB.open(DB_NAME, 2);
             idbRequest.onupgradeneeded =
                 function(event) {
@@ -20,7 +22,8 @@ function DbManager (name){
                     // Create an index to search customers by name. We may have duplicates
                     // so we can't use a unique index.
                     objectStore.createIndex("state", "state", { unique: false });
-                    // Store values in the newly created objectStore.
+                    objectStore.createIndex("url", "url", { unique: false });
+                    objectStore.createIndex("openPath", "openPath", { unique: false });
                     console.log('create ok');
                 };
         },
@@ -34,6 +37,7 @@ function DbManager (name){
                     //alert("All done!");
                 };
                 transaction.onerror = function(event) {
+                    replace(data.id, data);
                     console.log('transaction err');
                     // Don't forget to handle errors!
                 };
@@ -108,6 +112,11 @@ function DbManager (name){
             }
         },
 
+        deleteDB = function(){
+            indexedDB.deleteDatabase(DB_NAME);
+            console.log('db delete');
+        },
+
         onError = function(err) {
             console.log('Error: ' + err);
         };
@@ -117,6 +126,7 @@ function DbManager (name){
         add : add,
         read: readOne,
         remove: remove,
-        replace: replace
+        replace: replace,
+        deleteDB: deleteDB
     }
 }

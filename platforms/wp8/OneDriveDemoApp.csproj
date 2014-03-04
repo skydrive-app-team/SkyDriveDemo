@@ -228,6 +228,7 @@
   <ItemGroup>
     <Content Include="www\js\ngApp.js" />
     <Content Include="www\js\ngOneDriveCtrl.js" />
+    <Content Include="www\js\oneDriveDb.js" />
     <Content Include="www\js\skyDrive.js" />
     <Content Include="www\lib\angular.js" />
     <Content Include="www\lib\bootstarp\css\bootstrap-theme.css" />
