@@ -38,7 +38,7 @@
     <div id="id" class="container" >
         <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
             <!--ng-if="filesAndFolders!=null"-->
-            <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr;Back</a> </h1>
+            <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a> </h1>
             <div  ng-repeat="obj in filesAndFolders " >
                 <div class="panel panel-primary" ng-if="obj.type =='folder'">
                     <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
