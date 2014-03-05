@@ -38,13 +38,32 @@ function SkyDriveManager() {
         },
 
         createDirectoryForPath= function(path, fileSystem){
-            var tmpPath = '',
-                dirArgs = path.split('/');
+            var dirArgs = path.split('/'),
+                tmpPath = dirArgs[0],
+                deferred = q.defer(),
+                createDir = function(i) {
+                    if (i < dirArgs.length) {
+                        fileSystem.root.getDirectory(tmpPath , {create: true}, function(){
+                            console.log(tmpPath + ' create');
+                            if (i < dirArgs.length - 1){
+                                tmpPath += '/' + dirArgs[i + 1];
+                                createDir(i + 1);
+                            } else {
+                                deferred.resolve();
+                            }
+                        });
+                    }
+                };
 
+/*
             for( var i = 0; i < dirArgs.length; i++){
                 tmpPath += "/" + dirArgs[i];
                 fileSystem.root.getDirectory(tmpPath , {create: true});
-            }
+            };
+*/
+            createDir(0);
+
+            return deferred.promise;
         },
 
         generateURLs = function() {
@@ -129,20 +148,27 @@ function SkyDriveManager() {
         downloadFile: function (uriString, fileName, path ,onSuccess , onError, onProgress) {
             // open target file for download
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-                newPath = generatePath(path);
+                var newPath = generatePath(path);
                 //console.log(newPath);
 
-                createDirectoryForPath(newPath, fileSystem);
+                createDirectoryForPath(newPath, fileSystem).then( function() {
 
-                fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile){
-                    var onSuccessThis = function(res){
-                            onSuccess(targetFile.fullPath);
-                        },
-                        downloader = new BackgroundTransfer.BackgroundDownloader(),
-                        // Create a new download operation.
-                        download = downloader.createDownload(uriString, targetFile);
-                    // Start the download and persist the promise to be able to cancel the download.
-                    download.startAsync().then(onSuccessThis, onError, onProgress);
+                    fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile){
+                        var onSuccessThis = function(res){
+                                onSuccess(targetFile.fullPath);
+                            },
+                            downloader = new BackgroundTransfer.BackgroundDownloader(),
+                            // Create a new download operation.
+                            download = downloader.createDownload(uriString, targetFile);
+
+                        if(window.download == download){
+                            console.log("===========>> same download");
+                        }
+                        window.download = download;
+
+                        // Start the download and persist the promise to be able to cancel the download.
+                        download.startAsync().then(onSuccessThis, onError, onProgress);
+                    });
                 });
             });
         }
