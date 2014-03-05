@@ -161,11 +161,6 @@ function SkyDriveManager() {
                             // Create a new download operation.
                             download = downloader.createDownload(uriString, targetFile);
 
-                        if(window.download == download){
-                            console.log("===========>> same download");
-                        }
-                        window.download = download;
-
                         // Start the download and persist the promise to be able to cancel the download.
                         download.startAsync().then(onSuccessThis, onError, onProgress);
                     });
