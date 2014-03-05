@@ -2,6 +2,8 @@
 using System.IO.IsolatedStorage;
 using System.Linq;
 using Microsoft.Phone.BackgroundTransfer;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace WPCordovaClassLib.Cordova.Commands
 {       
@@ -11,9 +13,8 @@ namespace WPCordovaClassLib.Cordova.Commands
     /// </summary>
     class BackgroundDownload : BaseCommand
     {
-        private string _uriString;
-        private string _filePath;
-        private string _callbackId;
+        private Dictionary<string, Download> _activDownload = new Dictionary<string, Download>();
+
         private BackgroundTransferRequest _transfer;
 
         public void startAsync(string options)
@@ -21,13 +22,15 @@ namespace WPCordovaClassLib.Cordova.Commands
             try
             {
                 var optStings = JSON.JsonHelper.Deserialize<string[]>(options);
-                _uriString = optStings[0];
-                _filePath = optStings[1];
-                _callbackId = optStings[2];
+                
+                var uriString = optStings[0];
+                var filePath = optStings[1];
 
-                var requestUri = new Uri(_uriString);
+                _activDownload.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
 
-                _transfer = FindTransfer(_filePath);
+                var requestUri = new Uri(uriString);
+
+                _transfer = FindTransfer(filePath);
 
                 if (_transfer == null)
                 {
@@ -38,7 +41,7 @@ namespace WPCordovaClassLib.Cordova.Commands
                     _transfer = new BackgroundTransferRequest(requestUri, downloadLocation);
 
                     // Tag is used to make sure we run single background transfer for this file
-                    _transfer.Tag = _filePath;
+                    _transfer.Tag = filePath;
 
                     BackgroundTransferService.Add(_transfer);
                 }
@@ -46,7 +49,7 @@ namespace WPCordovaClassLib.Cordova.Commands
                 if (_transfer.TransferStatus == TransferStatus.Completed)
                 {
                     // file was already downloaded while we were in background and we didn't report this
-                    MoveFile();
+                    MoveFile(_transfer);
                     BackgroundTransferService.Remove(_transfer);
                     DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
                 }
@@ -96,14 +99,15 @@ namespace WPCordovaClassLib.Cordova.Commands
                 // If the status code of a completed _transfer is 200 or 206, the _transfer was successful
                 if (transfer.StatusCode == 200 || transfer.StatusCode == 206)
                 {
-                    MoveFile();
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), _callbackId);
-                    
+                    MoveFile(transfer);
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), _activDownload[transfer.Tag].callbackId);
+
+                    _activDownload.Remove(transfer.Tag);
                 }
                 else
                 {
                     var strErrorMessage = transfer.TransferError != null ? transfer.TransferError.Message : "Unspecified transfer error";
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, strErrorMessage), _callbackId);
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, strErrorMessage), _activDownload[transfer.Tag].callbackId);
 
                 }
                 CleanUp();
@@ -122,20 +126,20 @@ namespace WPCordovaClassLib.Cordova.Commands
             progressUpdate.KeepCallback = true;
             progressUpdate.Message = String.Format("{{\"progress\":{0}}}", 100 * e.Request.BytesReceived / e.Request.TotalBytesToReceive);
 
-            DispatchCommandResult(progressUpdate, _callbackId);
+            DispatchCommandResult(progressUpdate, _activDownload[((BackgroundTransferRequest)sender).Tag].callbackId);
         }
 
-        private void MoveFile()
+        private void MoveFile(BackgroundTransferRequest transfer)
         {
             // The downloaded content is moved into the right place
             using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                string filename = _filePath;
+                string filename = transfer.Tag;
                 if (isoStore.FileExists(filename))
                 {
                     isoStore.DeleteFile(filename);
                 }
-                isoStore.MoveFile(_transfer.DownloadLocation.OriginalString, filename);
+                isoStore.MoveFile(transfer.DownloadLocation.OriginalString, filename);
             }
         }
 
