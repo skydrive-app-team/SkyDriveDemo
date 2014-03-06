@@ -18,18 +18,12 @@
             dbManager = new DbManager(NAME_DB),
             directoryId = [],
 
-            getFilesByName =  function(name){
+            getFilesByParameter =  function(parameter ,value){
                 return $scope.filesAndFolders.filter(
                     function (obj) {
-                        return obj.name === name;
+                        return obj[parameter] === value;
                     })[0];
-            },
 
-            getFilesById =  function(id){
-                return $scope.filesAndFolders.filter(
-                    function (obj) {
-                        return obj.id === id;
-                    })[0];
             },
 
             addDownloadState = function(data){
@@ -46,7 +40,7 @@
                         dbManager.read(obj.id,function(fileData){
                             if (!fileData) return;
                             console.log(JSON.stringify(fileData));
-                            var file = getFilesById(fileData.id);
+                            var file = getFilesByParameter('id', fileData.id);
                             file.state = fileData.state;
                             file.localPath = fileData.localPath;
                             $scope.$apply();
@@ -64,7 +58,7 @@
         $scope.directory = ROOT_TITLE;
 
         $scope.displayFolder = function (folderName) {
-            var folderId = getFilesByName(folderName).id;
+            var folderId = getFilesByParameter('name', folderName).id;
 
             oneDriveManager.loadFilesData(folderId + '/files')
                 .then(
@@ -123,7 +117,7 @@
 
             file.progress = "0";
             var onSuccess = function(filePath){
-                    var fileNew = getFilesByName(file.name);
+                    var fileNew = getFilesByParameter('name', file.name);
                     console.log('onSuccess ' + fileNew.name);
                     fileNew.localPath = filePath;
                     fileNew.state = DOWNLOADED_STATE;
@@ -145,7 +139,7 @@
                 onProgress = function(res){
                     console.log('onProgress ' + file.name);
 
-                    var fileNew = getFilesById(file.id);
+                    var fileNew = getFilesByParameter('id', file.id);
 
                     fileNew.state = PROGRESS_STATE;
                     fileNew.progress = res;
