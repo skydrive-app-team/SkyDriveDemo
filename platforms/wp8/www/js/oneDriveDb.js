@@ -18,17 +18,18 @@ function DbManager (name){
                     // Create an objectStore to hold information about our customers. We're
                     // going to use "ssn" as our key path because it's guaranteed to be
                     // unique.
-                    var objectStore = db.createObjectStore("loadState", { keyPath: "idFile" });
+                    var objectStore = db.createObjectStore("loadState", { keyPath: "id" });
                     // Create an index to search customers by name. We may have duplicates
                     // so we can't use a unique index.
                     objectStore.createIndex("state", "state", { unique: false });
                     objectStore.createIndex("url", "url", { unique: false });
-                    objectStore.createIndex("openPath", "openPath", { unique: false });
+                    objectStore.createIndex("localPath", "localPath", { unique: false });
                     console.log('create ok');
                 };
         },
 
         add = function(data) {
+            console.log('>>>add Start');
             if(db) {
                 var transaction = db.transaction(["loadState"], "readwrite");
                 // Do something when all the data is added to the database.
@@ -36,6 +37,7 @@ function DbManager (name){
                     console.log('transaction ok');
                     //alert("All done!");
                 };
+
                 transaction.onerror = function(event) {
                     replace(data.id, data);
                     console.log('transaction err');
@@ -45,10 +47,16 @@ function DbManager (name){
                 var objectStore = transaction.objectStore("loadState");
                 var request = objectStore.add(data);
                 request.onsuccess = function(event) {
-                    console.log('add ok');
+                    console.log('>>> add ok');
+                    // event.target.result == customerData[i].ssn;
+                };
+
+                request.error=function(){
+                    console.log('>>> add error');
                     // event.target.result == customerData[i].ssn;
                 };
             }else {
+                console.log('>>>add else');
                 var idbRequest = indexedDB.open(DB_NAME, 2);
                 idbRequest.onerror = onError;
                 idbRequest.onsuccess = function(event){

@@ -14,7 +14,7 @@
     // Point to the controller definition function.
     angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q' , function ($scope, $http, $q) {
 
-        var skyDriveManager = new SkyDriveManager(),
+        var oneDriveManager = new OneDriveManager(),
             dbManager = new DbManager(NAME_DB),
             directoryId = [],
 
@@ -55,9 +55,9 @@
                 });
             }
 
-        skyDriveManager.setClientId(CLIENT_ID);
-        skyDriveManager.setRedirectUri(REDIRECT_URI);
-        skyDriveManager.onControllerCreated($http, $q);
+        oneDriveManager.setClientId(CLIENT_ID);
+        oneDriveManager.setRedirectUri(REDIRECT_URI);
+        oneDriveManager.onControllerCreated($http, $q);
 
         dbManager.create();
 
@@ -66,7 +66,7 @@
         $scope.displayFolder = function (folderName) {
             var folderId = getFilesByName(folderName).id;
 
-            skyDriveManager.loadFilesData(folderId + '/files')
+            oneDriveManager.loadFilesData(folderId + '/files')
                 .then(
                 function (data) {
                     addDownloadState(data);
@@ -83,7 +83,7 @@
             var dirArr = $scope.directory.split('/'),
                 directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files' : null;
 
-            skyDriveManager.loadFilesData(directoryToLoad).then(
+            oneDriveManager.loadFilesData(directoryToLoad).then(
                 function (data) {
                     addDownloadState(data);
 
@@ -107,7 +107,6 @@
             // $scope.display();
             file.state = PROGRESS_STATE;
 
-            console.log('>>>>>>>>>>>>>>download');
             dbManager.add({
                 id: file.id,
                 state: PROGRESS_STATE,
@@ -124,16 +123,16 @@
 
             file.progress = "0";
             var onSuccess = function(filePath){
-                    file = getFilesByName(file.name);
-                    console.log('onSuccess ' + file.name);
-                    file.localPath = filePath;
-                    file.state = DOWNLOADED_STATE;
+                    var fileNew = getFilesByName(file.name);
+                    console.log('onSuccess ' + fileNew.name);
+                    fileNew.localPath = filePath;
+                    fileNew.state = DOWNLOADED_STATE;
 
                     dbManager.add({
-                        id: file.id,
+                        id: fileNew.id,
                         state: DOWNLOADED_STATE,
-                        url: file.source,
-                        localPath: file.localPath
+                        url: fileNew.source,
+                        localPath: fileNew.localPath
                     });
                     $scope.$apply();
                 },
@@ -154,20 +153,20 @@
                     $scope.$apply();
                 };
 
-            skyDriveManager.downloadFile(file.source, file.name, $scope.directory,onSuccess,onError,onProgress);
+            oneDriveManager.downloadFile(file.source, file.name, $scope.directory,onSuccess,onError,onProgress);
         };
 
         $scope.reload = function(file){
             $scope.downloadFile(file);
         };
 
-        skyDriveManager.loadUserInfo().then(
+        oneDriveManager.loadUserInfo().then(
             function (userInfo) {
                 $scope.userName = userInfo.name;
             }
         );
 
-        skyDriveManager.loadFilesData().then(
+        oneDriveManager.loadFilesData().then(
             function (data) {
                 addDownloadState(data);
                 $scope.filesAndFolders = data;

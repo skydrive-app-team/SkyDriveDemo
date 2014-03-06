@@ -6,7 +6,7 @@
 
 
 
-function SkyDriveManager() {
+function OneDriveManager() {
     var ROOT_DIRECTORY = "me/skydrive/files",
         accessToken,
         userInfoUrl ,
