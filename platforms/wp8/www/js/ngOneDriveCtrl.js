@@ -1,18 +1,14 @@
 (function () {
     'use strict';
 
-    // Controller name is handy for logging
-    var controllerId = 'ngOneDriveCtrl';
-
-    var APP_NAME = 'skyApp',
-        CONTROLLER_NAME = 'SkyListCtrl',
+    var controllerId = 'ngOneDriveCtrl', // Controller name is handy for logging
         ROOT_TITLE = 'Root',
         CLIENT_ID = "0000000048113444",
         REDIRECT_URI = "https://login.live.com/oauth20_desktop.srf",
         NAME_DB = 'oneDrivePhoneDB',
         DOWNLOADED_STATE = 'downloaded',
         NOT_DOWNLOADED_STATE = 'notDownloaded',
-        PROGRESS = 'progress';
+        PROGRESS_STATE = 'progress';
     // Define the controller on the module.
     // Inject the dependencies.
     // Point to the controller definition function.
@@ -43,20 +39,16 @@
                 }
                 });
             },
+
             updateStateOfDb = function(){
                 $scope.filesAndFolders.forEach(function(obj){
                     if (obj.type != 'folder'){
                         dbManager.read(obj.id,function(fileData){
+                            if (!fileData) return;
                             console.log(JSON.stringify(fileData));
-                            var file = getFilesById(fileData.idFile);
+                            var file = getFilesById(fileData.id);
                             file.state = fileData.state;
-                            file.openPath = fileData.openPath;
-                            console.log('asdasdasdasd');
-                            if(file.state == PROGRESS){
-                                console.log('mmmmmmmmmmmmmm ');
-                                $scope.downloadFile(file);
-                            }
-                            //console.log('apply ' + getFilesById(fileData.idFile).state );
+                            file.localPath = fileData.localPath;
                             $scope.$apply();
                         });
                     }
@@ -108,59 +100,57 @@
         };
 
         $scope.openFile = function(file){
-            cordova.exec(null, null, 'FileOpening', 'open', [file.openPath]);
+            cordova.exec(null, null, 'FileOpening', 'open', [file.localPath]);
         };
 
         $scope.downloadFile = function(file){
-           // $scope.display();
-            file.state = PROGRESS;
+            // $scope.display();
+            file.state = PROGRESS_STATE;
 
+            console.log('>>>>>>>>>>>>>>download');
             dbManager.add({
-                idFile: file.id,
-                state: PROGRESS,
+                id: file.id,
+                state: PROGRESS_STATE,
                 url: file.source,
-                openPath: file.openPath
+                localPath: file.localPath
             });
+
+            console.log(JSON.stringify({
+                id: file.id,
+                state: PROGRESS_STATE,
+                url: file.source,
+                localPath: file.localPath
+            }));
 
             file.progress = "0";
             var onSuccess = function(filePath){
-                    console.log('downloaded');
+                    file = getFilesByName(file.name);
                     console.log('onSuccess ' + file.name);
-                    file.openPath = filePath;
+                    file.localPath = filePath;
                     file.state = DOWNLOADED_STATE;
 
                     dbManager.add({
-                        idFile: file.id,
+                        id: file.id,
                         state: DOWNLOADED_STATE,
                         url: file.source,
-                        openPath: file.openPath
+                        localPath: file.localPath
                     });
                     $scope.$apply();
                 },
                 onError = function(res){
                     console.log('onError '+res);
-                    obj.state = NOT_DOWNLOADED_STATE;
-                    dbManager.add({
-                        idFile: file.id,
-                        state: NOT_DOWNLOADED_STATE,
-                        url: file.source,
-                        openPath: file.openPath
-                    });
+                    file.state = NOT_DOWNLOADED_STATE;
+                    dbManager.remove(file.id);
                     $scope.apply();
                 },
                 onProgress = function(res){
                     console.log('onProgress ' + file.name);
-                    var file2 = getFilesByName(file.name);
-                    console.log(file);
-                    file.state = PROGRESS;
-                    /*dbManager.add({
-                        idFile: file.id,
-                        state: PROGRESS,
-                        url: file.source//,
-                        //openPath: file.openPath
-                    });*/
-                    file.progress = res;
-                    console.log('progress ' + file.progress);
+
+                    var fileNew = getFilesById(file.id);
+
+                    fileNew.state = PROGRESS_STATE;
+                    fileNew.progress = res;
+
                     $scope.$apply();
                 };
 
