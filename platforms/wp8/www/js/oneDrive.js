@@ -3,9 +3,6 @@
  *
  * {http://skydrivesuperdemo.com/skyDrive/index.html#access_token=EwA4Aq1DBAAUGCCXc8wU/zFu9QnLdZXy+YnElFkAAdqlexTU7ZSo4VEOw1AG0+qq5werlglXA9MPwniDH8AUgjFwDmDDXsKHW04ZBuGbpaKqe7QCY/+4MHsDpvPKASiG1tkk1nz9fPKKBu0GuEgnI9QagBFKyFwFPbLTKjEh+qeRt40BA0mqTbvDjnDV2VOFc2s4eqvm1jZIV5zsuPcKBXIs2r0uNH6BhCOppK1F6+AqWrjCuKFBRQY3JInxB7XY/QJ1Mn/0G+wUIA1RFAQjCC5/uKzRVwsL+fdQpnjBp7v9PNZsV0oyj0fMO1OMheWRIS2Al7hNfyFEqVaKU1cvybBMcaTj/c5cJ46B7EsGsW3y31hDE48Lz2pwpI2djjgDZgAACHmiR3MWltDhCAHDp7gHzM2oTZ7HbW/7YvVEH8O/BQ19vhbQuIqEv5XsvIKSas18AMgeN3XmFjI9xyJusa+bWDsYsT0gv4ihUteYTu6+8RHVu2jpv/DOpd3K0VCeWnMmffkzHrSDwPXq3WA+a5wnSJAg9zQ+vXv/d6lUs9mUo4WCADXP+WS8wK7RwyTwCG298pO6SM9mJGZtaRZIiIGYAf5Mu0B4aYrxotrWgBDOBwtLQcQEgYN4dGn+1QEmd1nuhMeD0HK0Qr0xe1iAbnidkyQY6MZIhWd+y9QAFrMJzEjAmJn1gRm7BmaxCQiYCw6YvMxYvxVS25fbqT3Da1nzdAMnEg/REqfYalv65W85uJmxKIMAAA==&authentication_token=eyJhbGciOiJIUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJ2ZXIiOjEsImlzcyI6InVybjp3aW5kb3dzOmxpdmVpZCIsImV4cCI6MTM5MjgyNjc1NywidWlkIjoiZGM2ZWI0YjA1M2FlNDc5ZTBhNzgxN2RjYmFkODNhZmUiLCJhdWQiOiJza3lkcml2ZXN1cGVyZGVtby5jb20iLCJ1cm46bWljcm9zb2Z0OmFwcHVyaSI6ImFwcGlkOi8vMDAwMDAwMDA0ODExMzQ0NCIsInVybjptaWNyb3NvZnQ6YXBwaWQiOiIwMDAwMDAwMDQ4MTEzNDQ0In0.HJe2GRNhnjvisIE-RDPwepuPu6vWbwGzXlUa_7ppj_A&token_type=bearer&expires_in=3600&scope=wl.skydrive wl.signin wl.skydrive_update wl.basic wl.share&state=redirect_type=auth&display=touch&request_ts=1392740288950&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false}
  */
-
-
-
 function OneDriveManager() {
     var ROOT_DIRECTORY = "me/skydrive/files",
         accessToken,
@@ -33,10 +30,6 @@ function OneDriveManager() {
             }
         },
 
-        generatePath = function(directory){
-            return "OneDrive" + directory.substr(4,directory.length-1);
-        },
-
         createDirectoryForPath= function(path, fileSystem){
             var dirArgs = path.split('/'),
                 tmpPath = dirArgs[0],
@@ -45,7 +38,7 @@ function OneDriveManager() {
                     if (i < dirArgs.length) {
                         fileSystem.root.getDirectory(tmpPath , {create: true}, function(){
                             console.log(tmpPath + ' create');
-                            if (i < dirArgs.length - 1){
+                            if (i < dirArgs.length - 2){
                                 tmpPath += '/' + dirArgs[i + 1];
                                 createDir(i + 1);
                             } else {
@@ -55,12 +48,6 @@ function OneDriveManager() {
                     }
                 };
 
-/*
-            for( var i = 0; i < dirArgs.length; i++){
-                tmpPath += "/" + dirArgs[i];
-                fileSystem.root.getDirectory(tmpPath , {create: true});
-            };
-*/
             createDir(0);
 
             return deferred.promise;
@@ -145,22 +132,19 @@ function OneDriveManager() {
             return deferred.promise;
         },
 
-        downloadFile: function (uriString, fileName, path ,onSuccess , onError, onProgress) {
+        downloadFile: function (uriString, fileName,onSuccess , onError, onProgress) {
             // open target file for download
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-                var newPath = generatePath(path);
-                //console.log(newPath);
 
-                createDirectoryForPath(newPath, fileSystem).then( function() {
+                createDirectoryForPath(fileName, fileSystem).then( function() {
 
-                    fileSystem.root.getFile(newPath + "/" + fileName, { create: true }, function (targetFile){
+                    fileSystem.root.getFile(fileName, { create: true }, function (targetFile){
                         var onSuccessThis = function(res){
                                 onSuccess(targetFile.fullPath);
                             },
                             downloader = new BackgroundTransfer.BackgroundDownloader(),
                             // Create a new download operation.
                             download = downloader.createDownload(uriString, targetFile);
-
                         // Start the download and persist the promise to be able to cancel the download.
                         download.startAsync().then(onSuccessThis, onError, onProgress);
                     });

@@ -2,7 +2,7 @@
     'use strict';
 
     var controllerId = 'ngOneDriveCtrl', // Controller name is handy for logging
-        ROOT_TITLE = 'Root',
+        ROOT_TITLE = 'OneDrive',
         CLIENT_ID = "0000000048113444",
         REDIRECT_URI = "https://login.live.com/oauth20_desktop.srf",
         NAME_DB = 'oneDrivePhoneDB',
@@ -147,7 +147,7 @@
                     $scope.$apply();
                 };
 
-            oneDriveManager.downloadFile(file.source, file.name, $scope.directory,onSuccess,onError,onProgress);
+            oneDriveManager.downloadFile(file.source, $scope.directory + '/' + file.name, onSuccess, onError, onProgress);
         };
 
         $scope.reload = function(file){
