@@ -12,7 +12,7 @@ namespace WPCordovaClassLib.Cordova.Commands
         public string filePath;
         public string callbackId;
 
-        public Download(string uriString, string filePath, string callbackid)
+        public Download(string uriString, string filePath, string callbackId)
         {
             this.uriString = uriString;
             this.filePath = filePath;
