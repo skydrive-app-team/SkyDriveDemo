@@ -42,6 +42,10 @@
                             var file = getFilesByParameter('id', fileData.id);
                             file.state = fileData.state;
                             file.localPath = fileData.localPath;
+                            console.log(file.name+'  ' +file.startProgress+'    '+file.state);
+                            if (!file.startProgress && file.state == PROGRESS_STATE){
+                                $scope.downloadFile(file);
+                            }
                             $scope.$apply();
                         });
                     }
@@ -95,31 +99,22 @@
         };
 
         $scope.downloadFile = function(file){
-            // $scope.display();
-            // $scope.display();
             file.state = PROGRESS_STATE;
-
+            file.startProgress = true;
+            file.progress = "0";
             dataBase.addItem({
                 id: file.id,
                 state: PROGRESS_STATE,
                 url: file.source,
-                localPath: file.localPath
+                localPath:file.localPath
             });
 
-            console.log(JSON.stringify({
-                id: file.id,
-                state: PROGRESS_STATE,
-                url: file.source,
-                localPath: file.localPath
-            }));
-
-            file.progress = "0";
             var onSuccess = function(filePath){
                     var fileNew = getFilesByParameter('name', file.name);
                     console.log('onSuccess ' + fileNew.name);
+                    fileNew.startProgress = false;
                     fileNew.localPath = filePath;
                     fileNew.state = DOWNLOADED_STATE;
-                    console.log('ooooookkkk ');
                     dataBase.addItem({
                         id: fileNew.id,
                         state: DOWNLOADED_STATE,
@@ -129,9 +124,11 @@
                     $scope.$apply();
                 },
                 onError = function(res){
+                    var fileNew = getFilesByParameter('name', file.name);
                     console.log('onError '+res);
-                    file.state = NOT_DOWNLOADED_STATE;
-                    dataBase.removeItem(file.id);
+                    fileNew.state = NOT_DOWNLOADED_STATE;
+                    fileNew.startProgress = false;
+                    dataBase.removeItem(fileNew.id);
                     $scope.apply();
                 },
                 onProgress = function(res){
