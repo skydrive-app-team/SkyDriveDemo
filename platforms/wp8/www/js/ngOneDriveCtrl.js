@@ -5,7 +5,6 @@
         ROOT_TITLE = 'OneDrive',
         CLIENT_ID = "0000000048113444",
         REDIRECT_URI = "https://login.live.com/oauth20_desktop.srf",
-        dbName = 'oneDrivePhoneDB',
         DOWNLOADED_STATE = 'downloaded',
         NOT_DOWNLOADED_STATE = 'notDownloaded',
         PROGRESS_STATE = 'progress';
@@ -13,7 +12,10 @@
     // Inject the dependencies.
     // Point to the controller definition function.
     angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q' , function ($scope, $http, $q) {
-
+        document.addEventListener("backbutton", onBackKeyDown, true);
+        function onBackKeyDown() {
+            toPreFolder();
+        }
         var oneDriveManager = new OneDriveManager(),
             dataBase,
             directoryId = [],
@@ -33,10 +35,35 @@
                 });
             },
 
+            toPreFolder = function () {
+                if(ROOT_TITLE == $scope.directory)
+                {
+                    navigator.app.exitApp();
+                    return;
+                }
+                var dirArr = $scope.directory.split('/'),
+                    directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files' : null;
+
+                oneDriveManager.loadFilesData(directoryToLoad).then(
+                    function (data) {
+                        addDownloadState(data);
+
+                        $scope.filesAndFolders = data;
+
+                        directoryId.splice(directoryId.length - 1, 1);
+
+                        dirArr.splice(dirArr.length - 1, 1);
+                        $scope.directory = dirArr.join("/");
+
+                        updateStateOfDb();
+                    }
+                );
+            },
+
             updateStateOfDb = function(){
                 $scope.filesAndFolders.forEach(function(obj){
                     if (obj.type != 'folder'){
-                        dataBase.readItem(obj.id,function(fileData){
+                        dataBase.readItem(obj.id, function(fileData){
                             if (!fileData) return;
                             console.log(JSON.stringify(fileData));
                             var file = getFilesByParameter('id', fileData.id);
@@ -74,25 +101,6 @@
             );
         };
         $scope.signOut = oneDriveManager.signOut;
-        $scope.toPreFolder = function () {
-            var dirArr = $scope.directory.split('/'),
-                directoryToLoad = directoryId.length - 2 >= 0 ? directoryId[directoryId.length - 2] + '/files' : null;
-
-            oneDriveManager.loadFilesData(directoryToLoad).then(
-                function (data) {
-                    addDownloadState(data);
-
-                    $scope.filesAndFolders = data;
-
-                    directoryId.splice(directoryId.length - 1, 1);
-
-                    dirArr.splice(dirArr.length - 1, 1);
-                    $scope.directory = dirArr.join("/");
-
-                    updateStateOfDb();
-                }
-            );
-        };
 
         $scope.openFile = function(file){
             cordova.exec(null, null, 'FileOpening', 'open', [file.localPath]);
@@ -124,12 +132,13 @@
                     $scope.$apply();
                 },
                 onError = function(res){
+                    console.log('onError>>>>>>>>>> '+res);
                     var fileNew = getFilesByParameter('name', file.name);
-                    console.log('onError '+res);
-                    fileNew.state = NOT_DOWNLOADED_STATE;
+
                     fileNew.startProgress = false;
+                    fileNew.state = NOT_DOWNLOADED_STATE;
                     dataBase.removeItem(fileNew.id);
-                    $scope.apply();
+                    $scope.$apply();
                 },
                 onProgress = function(res){
                     console.log('onProgress ' + file.name);

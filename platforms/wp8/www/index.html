@@ -2,6 +2,7 @@
 <html lang="en" ng-app="app">
     <head>
         <meta charset="utf-8" />
+
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, removeItem the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
@@ -9,6 +10,7 @@
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="lib/bootstarp/css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript" charset="utf-8" src="cordova-2.5.0.js"></script>
     </head>
     <body ng-controller="ngOneDriveCtrl">
     <div class="container">
@@ -21,7 +23,8 @@
     <div id="id" class="container" >
         <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
             <!--ng-if="filesAndFolders!=null"-->
-            <h1>{{directory}} <a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a> </h1>
+            <!--<a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a>-->
+            <h1>{{directory}}  </h1>
             <div  ng-repeat="obj in filesAndFolders " >
                 <div class="panel panel-primary" ng-if="obj.type =='folder'">
                     <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
@@ -30,7 +33,7 @@
                     {{obj.name}}
                     <a ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</a>
                     <div ng-if="obj.state=='progress'" class="progress progress-striped active">
-                        <div class="progress-bar"  role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
                         {{obj.progress}}%
                         </div>
                     </div>
@@ -39,7 +42,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><script>
+
+    </script>
         <script src="lib/jquery.min.js"></script>
         <script src="lib/angular.js" ></script>
         <script src="lib/bootstarp/js/bootstrap.min.js"></script>
