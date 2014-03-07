@@ -148,10 +148,6 @@
             oneDriveManager.downloadFile(file.source, $scope.directory + '/' + file.name, onSuccess, onError, onProgress);
         };
 
-        $scope.reload = function(file){
-            $scope.downloadFile(file);
-        };
-
         oneDriveManager.loadUserInfo().then(
             function (userInfo) {
 
