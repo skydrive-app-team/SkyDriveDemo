@@ -127,7 +127,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Plugins\FileOpening.cs" />
-    <Compile Include="Plugins\org.apache.cordova.background-download\Download.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

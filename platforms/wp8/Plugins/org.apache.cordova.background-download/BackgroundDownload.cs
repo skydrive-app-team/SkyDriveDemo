@@ -6,14 +6,41 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace WPCordovaClassLib.Cordova.Commands
-{       
+{
+    class Download
+    {
+        public string _uriString;
+        public string _filePath;
+        public string _callbackId;
+
+        public string UriString
+        {
+            get { return _uriString; }
+        }
+        public string FilePath
+        {
+            get { return _filePath; }
+        }
+        public string CallbackId
+        {
+            get { return _callbackId; }
+        }
+
+        public Download(string uriString, string filePath, string callbackId)
+        {
+            _uriString = uriString;
+            _filePath = filePath;
+            _callbackId = callbackId;
+        }
+    }
+
     /// <summary>
     /// TODO comments
     /// TODO concurrent operations support
     /// </summary>
     class BackgroundDownload : BaseCommand
     {
-        private Dictionary<string, Download> _activDownload = new Dictionary<string, Download>();
+        private Dictionary<string, Download> _activDownloads = new Dictionary<string, Download>();
 
         public void startAsync(string options)
         {
@@ -23,15 +50,16 @@ namespace WPCordovaClassLib.Cordova.Commands
                 
                 var uriString = optStings[0];
                 var filePath = optStings[1];
-                                
-                try
+
+
+                if (_activDownloads.ContainsKey(filePath))
                 {
-                    _activDownload.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
+                    _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
                 }
-                catch
+                else
                 {
-                    _activDownload.Remove(filePath);
-                    _activDownload.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
+                    _activDownloads.Remove(filePath);
+                    _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
                 }
                
                 var requestUri = new Uri(uriString);
@@ -106,14 +134,14 @@ namespace WPCordovaClassLib.Cordova.Commands
                 if (transfer.StatusCode == 200 || transfer.StatusCode == 206)
                 {
                     MoveFile(transfer);
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), _activDownload[transfer.Tag].callbackId);
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), _activDownloads[transfer.Tag].CallbackId);
 
-                    _activDownload.Remove(transfer.Tag);
+                    _activDownloads.Remove(transfer.Tag);
                 }
                 else
                 {
                     var strErrorMessage = transfer.TransferError != null ? transfer.TransferError.Message : "Unspecified transfer error";
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, strErrorMessage), _activDownload[transfer.Tag].callbackId);
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, strErrorMessage), _activDownloads[transfer.Tag].CallbackId);
                     //_activDownload.Remove(transfer.Tag);
                 }
                 CleanUp(transfer);
@@ -132,7 +160,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             progressUpdate.KeepCallback = true;
             progressUpdate.Message = String.Format("{{\"progress\":{0}}}", 100 * e.Request.BytesReceived / e.Request.TotalBytesToReceive);
 
-            DispatchCommandResult(progressUpdate, _activDownload[((BackgroundTransferRequest)sender).Tag].callbackId);
+            DispatchCommandResult(progressUpdate, _activDownloads[((BackgroundTransferRequest)sender).Tag].CallbackId);
         }
 
         private void MoveFile(BackgroundTransferRequest transfer)
