@@ -1,140 +1,79 @@
 /**
- * Created by sergey.vlasov on 3/3/14.
- */
-function DbManager (name){
-    var DB_NAME = name,
-        db,
+ * Created by sergey.vlasov on 3/3/14.*/
+DbManager = {
+    createDB: function(nameDB, tableName, keyPath, parametersArray, onSuccess){
+        console.log('start ok'+ nameDB);
+        var idbRequest = indexedDB.open(nameDB, 2);
+        console.log('create start');
+        idbRequest.onupgradeneeded =
+            function(event) {
+                console.log('create start');
+                var db = event.target.result,
+                    objectStore = db.createObjectStore(tableName, { keyPath: keyPath });
+                console.log('create 3333');
+                parametersArray.forEach(function(nameIndex){
+                    console.log(nameIndex);
+                    objectStore.createIndex(nameIndex, nameIndex, { unique: false });
+                });
+                console.log('create ok');
+            };
+        idbRequest.onsuccess = function(event){
+            console.log('ok');
+            onSuccess(new OneDriveDB(event.target.result, tableName));
+        }
+    },
+    deleteDB: function(nameDB){
+            indexedDB.deleteDatabase(nameDB);
+            console.log('del ok');
+    }
+}
 
-        create = function(){
-            /*try{
-            indexedDB.deleteDatabase(DB_NAME);
-            console.log('db delete');
-            }catch (e){}
-            console.log('create');*/
-            var idbRequest = indexedDB.open(DB_NAME, 2);
-            idbRequest.onupgradeneeded =
-                function(event) {
-                    db = event.target.result;
-                    // Create an objectStore to hold information about our customers. We're
-                    // going to use "ssn" as our key path because it's guaranteed to be
-                    // unique.
-                    var objectStore = db.createObjectStore("loadState", { keyPath: "id" });
-                    // Create an index to search customers by name. We may have duplicates
-                    // so we can't use a unique index.
-                    objectStore.createIndex("state", "state", { unique: false });
-                    objectStore.createIndex("url", "url", { unique: false });
-                    objectStore.createIndex("localPath", "localPath", { unique: false });
-                    console.log('create ok');
-                };
+function OneDriveDB(DB,tablename){
+    var db = DB,
+        tableName = tablename,
+        getObjectStore = function(){
+            console.log(tableName);
+            return  db.transaction([tableName], "readwrite").objectStore(tableName);
+
+        },
+        addItem = function(data, onsuccess, onerror) {
+            var transaction = db.transaction([tableName], "readwrite"),
+                objectStore = transaction.objectStore(tableName),
+                request = objectStore.add(data);
+
+            transaction.onerror = function(event) {
+                console.log('db    replase');
+                replaceItem(data.id, data);
+            };
+
+            request.onsuccess = onsuccess;
+            request.onerror = onerror;
         },
 
-        add = function(data) {
-            console.log('>>>add Start');
-            if(db) {
-                var transaction = db.transaction(["loadState"], "readwrite");
-                // Do something when all the data is added to the database.
-                transaction.oncomplete = function(event) {
-                    console.log('transaction ok');
-                    //alert("All done!");
-                };
-
-                transaction.onerror = function(event) {
-                    replace(data.id, data);
-                    console.log('transaction err');
-                    // Don't forget to handle errors!
-                };
-
-                var objectStore = transaction.objectStore("loadState");
-                var request = objectStore.add(data);
-                request.onsuccess = function(event) {
-                    console.log('>>> add ok');
-                    // event.target.result == customerData[i].ssn;
-                };
-
-                request.error=function(){
-                    console.log('>>> add error');
-                    // event.target.result == customerData[i].ssn;
-                };
-            }else {
-                console.log('>>>add else');
-                var idbRequest = indexedDB.open(DB_NAME, 2);
-                idbRequest.onerror = onError;
-                idbRequest.onsuccess = function(event){
-                    db = event.target.result;
-                    add(data);
-                }
-            }
+        readItem = function(id, onsuccess){
+            getObjectStore().get(id).onsuccess = function(event) {
+                onsuccess(event.target.result);
+            };
         },
 
-        readOne = function(id, onsuccess){
-            if(db){
-                db.transaction("loadState").objectStore("loadState").get(id).onsuccess = function(event) {
-                    //console.log('ret ',event.target.result);
-                    onsuccess(event.target.result);
-                };
-            }else {
-                var idbRequest = indexedDB.open(DB_NAME, 2);
-                idbRequest.onerror = onError;
-                idbRequest.onsuccess = function(event){
-                    db = event.target.result;
-                    readOne(id,onsuccess);
-                    //console.log(readOne(id));
-                }
-            }
+        removeItem = function(id, onsuccess, onerror) {
+            var request = getObjectStore().delete(id);
+            request.onsuccess = onsuccess;
+            request.onerror = onerror;
         },
 
-        remove = function(id) {
-            if (db) {
-                var request = db.transaction(["loadState"], "readwrite")
-                    .objectStore("loadState")
-                    .delete(id);
-                request.onsuccess = function(event) {
-                    console.log('remove ok');
-                };
-            } else {
-                var idbRequest = indexedDB.open(DB_NAME, 2);
-                idbRequest.onerror = onError;
-                idbRequest.onsuccess = function(event){
-                    db = event.target.result;
-                    remove(id);
-                    //console.log(readOne(id));
-                }
-            }
-        },
-
-        replace = function(id, newObj) {
-            if (db) {
-                var request = db.transaction(["loadState"], "readwrite")
-                    .objectStore("loadState")
-                    .delete(id);
-                request.onsuccess = function(event) {
-                    add(newObj);
-                };
-            } else {
-                var idbRequest = indexedDB.open(DB_NAME, 2);
-                idbRequest.onerror = onError;
-                idbRequest.onsuccess = function(event) {
-                    db = event.target.result;
-                    replace(id, newObj);
-                }
-            }
-        },
-
-        deleteDB = function(){
-            indexedDB.deleteDatabase(DB_NAME);
-            console.log('db delete');
-        },
-
-        onError = function(err) {
-            console.log('Error: ' + err);
+        replaceItem = function(id, newObj, onsuccess, onerror) {
+            var request = getObjectStore().delete(id);
+            request.onsuccess = function(event) {
+                addItem(newObj, onsuccess, onerror);
+            };
+            request.onerror = onerror;
         };
 
     return {
-        create : create,
-        add : add,
-        read: readOne,
-        remove: remove,
-        replace: replace,
-        deleteDB: deleteDB
-    }
+        addItem : addItem,
+        readItem: readItem,
+        removeItem: removeItem,
+        replaceItem: replaceItem
+    };
 }
