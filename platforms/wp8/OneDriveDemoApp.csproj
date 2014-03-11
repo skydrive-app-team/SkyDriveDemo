@@ -238,7 +238,9 @@
     <Content Include="www\lib\bootstarp\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="www\lib\bootstarp\js\bootstrap.js" />
     <Content Include="www\lib\bootstarp\js\bootstrap.min.js" />
+    <Content Include="www\lib\bootstrap.css" />
     <Content Include="www\lib\jquery.min.js" />
+    <Content Include="www\lib\metro-bootstrap.css" />
     <Content Include="www\plugins\org.apache.cordova.background-download\www\BackgroundDownloader.js" />
   </ItemGroup>
   <ItemGroup>

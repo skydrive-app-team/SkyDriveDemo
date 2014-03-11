@@ -9,8 +9,15 @@
         <title>OneDrive</title>
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="lib/bootstarp/css/bootstrap.min.css" rel="stylesheet">
+        <link href="lib/bootstrap.css" rel="stylesheet">
         <script type="text/javascript" charset="utf-8" src="cordova-2.5.0.js"></script>
+        <style>
+            .clip {
+                white-space: nowrap; /* Запрещаем перенос строк */
+                overflow: hidden; /* Обрезаем все, что не помещается в область */
+                text-overflow: ellipsis; /* Добавляем многоточие */
+            }
+        </style>
     </head>
     <body ng-controller="ngOneDriveCtrl">
     <div class="container">
@@ -21,24 +28,27 @@
         </div>
     </div>
     <div id="id" class="container" >
-        <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
+        <div class="panel container" ng-if="filesAndFolders!=null" >
             <!--ng-if="filesAndFolders!=null"-->
             <!--<a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a>-->
             <h1>{{directory}}  </h1>
             <div  ng-repeat="obj in filesAndFolders " >
                 <div class="panel panel-primary" ng-if="obj.type =='folder'">
-                    <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
+                    <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}<span  class="pull-right">{{obj.count}}</span></div>
                 </div>
-                <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >
-                    {{obj.name}}
-                    <a ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</a>
-                    <div ng-if="obj.state=='progress'" class="progress progress-striped active">
-                        <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
-                        {{obj.progress}}%
+                <div class="panel panel-body" ng-if="obj.type!='folder'" >
+                    <div>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-primary" ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</button>
+                            <button type="button" class="btn btn-primary" ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open</button>
+                            <button type="button" class="btn btn-primary" ng-if="obj.state=='downloaded'"  ng-click="downloadFile(obj)">reload</button>
+                        </div>
+                        <h2 class="clip">{{obj.name}}</h2>
+                        <div ng-if="obj.state=='progress'" class="progress progress-striped active">
+                            <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
+                            </div>
                         </div>
                     </div>
-                    <a ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open |</a>
-                    <a ng-if="obj.state=='downloaded'"  ng-click="downloadFile(obj)">| reload</a>
                 </div>
             </div>
         </div>

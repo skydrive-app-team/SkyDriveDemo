@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+    <head>
+        <meta charset="utf-8" />
+
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, removeItem the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>OneDrive</title>
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="lib/bootstarp/css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript" charset="utf-8" src="cordova-2.5.0.js"></script>
+
+        <link href="lib/metro/css/metro-bootstrap.css" rel="stylesheet">
+        <link href="lib/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
+        <link href="lib/metro/css/iconFont.css" rel="stylesheet">
+        <link href="lib/metro/css/docs.css" rel="stylesheet">
+        <link href="lib/metro/js/prettify/prettify.css" rel="stylesheet">
+        <link href="lib/metro/css/iconFont.css" rel="stylesheet">
+    </head>
+    <body class="metro container" ng-controller="ngOneDriveCtrl">
+        <div class="listview">
+            <div  class="list shadow bg-darkBlue">
+                <div class="list-content">
+                   <i class="icon-folder-2"></i>
+                    folder Name
+                    <div class="data">
+                        <span class="list-title"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div  class="list shadow">
+                <div class="list-content">
+                    <i class="icon-file"></i>
+                    file Name
+                    <div class="data">
+                        <span class="list-title"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+     <!--   <button class="command-button primary">
+            <i class="icon-folder on-left"></i>
+                folder Name
+        </button>-->
+ <!--   <div class="container">
+        <div>
+            <h1 ng-if="userName!=null"  class="pull-right" >{{userName}}
+                <a ng-click="signOut()" class="btn btn-primary btn-lg" role="button">Sign out</a>
+            </h1>
+        </div>
+    </div>
+    <div id="id" class="container" >
+        <div class="panel panel-primary container" ng-if="filesAndFolders!=null" >
+            &lt;!&ndash;ng-if="filesAndFolders!=null"&ndash;&gt;
+            &lt;!&ndash;<a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a>&ndash;&gt;
+            <h1>{{directory}}  </h1>
+            <div  ng-repeat="obj in filesAndFolders " >
+                <div class="panel panel-primary" ng-if="obj.type =='folder'">
+                    <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}</div>
+                </div>
+                <div class="panel panel-primary panel-body" ng-if="obj.type!='folder'" >
+                    {{obj.name}}
+                    <a ng-if="obj.state=='notDownloaded'" ng-click="downloadFile(obj)">download</a>
+                    <div ng-if="obj.state=='progress'" class="progress progress-striped active">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
+                        {{obj.progress}}%
+                        </div>
+                    </div>
+                    <a ng-if="obj.state=='downloaded'"  ng-click="openFile(obj)">open |</a>
+                    <a ng-if="obj.state=='downloaded'"  ng-click="downloadFile(obj)">| reload</a>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- Load JavaScript Libraries -->
+    <script src="lib/metro/js/jquery/jquery.min.js"></script>
+    <script src="lib/metro/js/jquery/jquery.widget.min.js"></script>
+    <script src="lib/metro/js/jquery/jquery.mousewheel.js"></script>
+    <script src="lib/metro/js/prettify/prettify.js"></script>
+
+    <!-- Metro UI CSS JavaScript plugins -->
+    <script src="lib/metro/js/load-metro.js"></script>
+
+        <script src="lib/jquery.min.js"></script>
+        <script src="lib/angular.js" ></script>
+        <script src="lib/bootstarp/js/bootstrap.min.js"></script>
+        <script src="js/oneDrive.js"></script>
+        <script src="js/oneDriveDb.js"></script>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/ngApp.js"></script>
+        <script type="text/javascript" src="js/ngOneDriveCtrl.js"></script>
+    </body>
+</html>
