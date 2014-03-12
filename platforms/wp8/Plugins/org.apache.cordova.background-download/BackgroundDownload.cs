@@ -64,7 +64,7 @@ namespace WPCordovaClassLib.Cordova.Commands
                
                 var requestUri = new Uri(uriString);
 
-                BackgroundTransferRequest transfer = FindTransfer(filePath);
+                BackgroundTransferRequest transfer = FindTransferByLocalPath(filePath);
 
                 if (transfer == null)
                 {
@@ -103,12 +103,14 @@ namespace WPCordovaClassLib.Cordova.Commands
 
         public void stop(string options)
         {
-            /*try
+            var optStings = JSON.JsonHelper.Deserialize<string[]>(options);
+            var transfer = FindTransferByUri(new Uri(optStings[0]));
+            try
             {
 
-                if (_transfer != null)
+                if (transfer != null)
                 {
-                    var request = BackgroundTransferService.Find(_transfer.RequestId);
+                    var request = BackgroundTransferService.Find(transfer.RequestId);
                     if (request != null)
                     {
                         // stops transfer and triggers TransferStatusChanged event
@@ -121,7 +123,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             catch (Exception ex)
             {
                 DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, ex.Message));
-            }*/
+            }
         }
 
         private void TransferStatusChanged(object sender, BackgroundTransferEventArgs backgroundTransferEventArgs)
@@ -148,9 +150,14 @@ namespace WPCordovaClassLib.Cordova.Commands
             }
         }
 
-        private static BackgroundTransferRequest FindTransfer(string tag)
+        private static BackgroundTransferRequest FindTransferByLocalPath(string tag)
         {
             return BackgroundTransferService.Requests.FirstOrDefault(r => r.Tag == tag);
+        }
+
+        private static BackgroundTransferRequest FindTransferByUri(Uri uri)
+        {
+            return BackgroundTransferService.Requests.FirstOrDefault(r => r.RequestUri.OriginalString == uri.OriginalString);
         }
 
         void ProgressChanged(object sender, BackgroundTransferEventArgs e)
