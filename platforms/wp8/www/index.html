@@ -4,6 +4,8 @@
         <meta charset="utf-8" />
 
         <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
         <!-- WARNING: for iOS 7, removeItem the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <title>OneDrive</title>
@@ -12,13 +14,36 @@
         <link href="lib/bootstrap.css" rel="stylesheet">
         <script type="text/javascript" charset="utf-8" src="cordova-2.5.0.js"></script>
         <style>
+/*            body{
+                -ms-content-zooming:none;
+            }*/
             .clip {
                 white-space: nowrap; /* Запрещаем перенос строк */
                 overflow: hidden; /* Обрезаем все, что не помещается в область */
                 text-overflow: ellipsis; /* Добавляем многоточие */
             }
-            html {
-                -webkit-user-select: none;
+            .new{
+                height: 20px;
+                margin-top: 80px;
+                text-align: right;
+            }
+            .top0{
+                margin-top: 0px;
+            }
+
+            .quad{
+                background-color: #3e4bff;
+                width: 100px;
+                height: 100px;
+                margin-right: 10px;
+                padding-left: 80px;
+                padding-top: 50px;
+                color: #ffffff;
+            }
+            .quadImg{
+                width: 100px;
+                height: 100px;
+                margin-right: 10px;
             }
         </style>
     </head>
@@ -36,22 +61,27 @@
             <!--<a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a>-->
             <h1>{{directory}}  </h1>
             <div  ng-repeat="obj in filesAndFolders " >
-                <div class="panel panel-primary" ng-if="obj.type =='folder'">
-                    <div ng-click="displayFolder(obj.name)" class="panel-heading panel-title" role="button"  >{{obj.name}}<span  class="pull-right">{{obj.count}}</span></div>
+
+                <div class="panel panel-body" ng-if="obj.type =='folder'">
+                    <div ng-click="displayFolder(obj.name)" role="button" class="quad pull-left">
+                         <h3>{{obj.count}}</h3>
+                    </div>
+                    <h2 class="top0">{{obj.name}}</h2>
+                    <h3 class="masthead-lead">{{generateDateTime(obj.updated_time)}}</h3>
                 </div>
                 <div class="panel panel-body" ng-if="obj.type!='folder'" >
-                    <div>
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-primary" ng-if="obj.state==0" ng-click="onClickDownloadButton(obj)">download</button>
-                            <button type="button" class="btn btn-primary" ng-if="obj.state==1"  ng-click="openFile(obj)">open</button>
-                            <button type="button" class="btn btn-primary" ng-if="obj.state==1"  ng-click="onClickDownloadButton(obj)">reload</button>
-                        </div>
-                        <h2 class="clip">{{obj.name}}</h2>
-                        <div ng-if="obj.state==2" class="progress progress-striped active">
-                            <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
-                            </div>
+                    <img class="quadImg pull-left" src="img/text.png"/>
+                    <h2 class="clip top0">{{obj.name}}</h2>
+                    <div ng-if="obj.state == 2" class="progress progress-striped active">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100" ng-style="{width: obj.progress +'%'}">
                         </div>
                     </div>
+              <!--  <div class="pull-right">-->
+                    <div type="button" class="btn btn-primary" ng-if="obj.state==0" ng-click="onClickDownloadButton(obj)">download</div>
+                    <div type="button" class="btn btn-primary" ng-if="obj.state==1"  ng-click="openFile(obj)">open</div>
+                    <div type="button" class="btn btn-primary" ng-if="obj.state==1"  ng-click="onClickDownloadButton(obj)">reload</div>
+
+                <!--</div>-->
                 </div>
             </div>
         </div>

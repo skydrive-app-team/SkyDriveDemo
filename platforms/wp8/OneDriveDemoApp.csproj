@@ -223,6 +223,7 @@
     <Content Include="www\img\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="www\img\text.png" />
     <Content Include="www\index.html" />
   </ItemGroup>
   <ItemGroup>

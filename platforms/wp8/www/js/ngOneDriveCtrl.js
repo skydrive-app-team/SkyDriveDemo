@@ -160,6 +160,15 @@
             downloadFile(file);
         };
 
+        $scope.generateDateTime = function(date){
+            var strAr = date.split('T');
+            return strAr[0] + ' ' + strAr[1].split('+',1);
+        };
+
+        $scope.generateSize = function(size){
+
+        }
+
         oneDriveManager.loadUserInfo().then(
             function (userInfo) {
                 DbManager.createDB(userInfo.id, "loadState",'id',['state', 'url', 'localPath'], function(db){
