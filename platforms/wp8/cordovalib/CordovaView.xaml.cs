@@ -348,8 +348,7 @@ namespace WPCordovaClassLib
                 //    }
                 //}
 
-                CordovaBrowser.Navigate(new Uri(String.Format("https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts={0}&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html",
-                    DateTime.UtcNow.Ticks), UriKind.Absolute));
+                CordovaBrowser.Navigate(new Uri(String.Format("https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts={0}&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html", DateTime.UtcNow.Ticks), UriKind.Absolute));
 
                 IsBrowserInitialized = true;
                 AttachHardwareButtonHandlers();
@@ -547,10 +546,15 @@ namespace WPCordovaClassLib
 
         private void CordovaBrowser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-           foreach(IBrowserDecorator iBD in browserDecorators.Values)
-           {
-               iBD.InjectScript();
-           }
+            if (e.Uri.OriginalString == "https://login.live.com/oauth20_desktop.srf?lc=1033")
+            {
+                Dispatcher.BeginInvoke(()=> CordovaBrowser.Navigate(new Uri(String.Format("https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts={0}&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html", DateTime.UtcNow.Ticks), UriKind.Absolute))); 
+            }
+
+            foreach(IBrowserDecorator iBD in browserDecorators.Values)
+            {
+                iBD.InjectScript();
+            }
         }
 
 
