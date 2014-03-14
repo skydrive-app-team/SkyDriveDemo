@@ -145,6 +145,23 @@ namespace WPCordovaClassLib
                 return;
             }
 
+            this.Browser.LoadCompleted += (sender, args) => progressbar.Visibility = Visibility.Collapsed;
+            this.Browser.NavigationFailed += (sender, args) => progressbar.Visibility = Visibility.Collapsed;
+            this.Browser.Navigating += (sender, args) => progressbar.Visibility = Visibility.Visible;
+
+            this.Browser.ScriptNotify += (sender, args) =>
+                {
+                    if (args.Value.Contains("progressbar_on"))
+                    {
+                       progressbar.Visibility = Visibility.Visible;
+                    }
+
+                    if (args.Value.Contains("progressbar_off"))
+                    {
+                       progressbar.Visibility = Visibility.Collapsed;
+                    }
+                };
+
 
             StartupMode mode = PhoneApplicationService.Current.StartupMode;
 

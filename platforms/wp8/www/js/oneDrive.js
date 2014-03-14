@@ -107,12 +107,13 @@ function OneDriveManager() {
 
         loadFilesData : function(request){
             var deferred = q.defer();
-
+            window.external.Notify('progressbar_on');
             http({
                 method: 'GET',
                 url:  filesUrlForDirectory.replace("%folderID%", request||ROOT_DIRECTORY)}
             ).success(
                 function (response) {
+                    window.external.Notify('progressbar_off');
                     deferred.resolve(response.data);
                 });
 
@@ -121,11 +122,13 @@ function OneDriveManager() {
 
         loadUserInfo: function(){
             var deferred = q.defer();
+            window.external.Notify('progressbar_on');
             http({
                 method: 'GET',
                 url: userInfoUrl }
             ).success(
-                function (userInfo) {
+                function (userInfo) { 
+                    window.external.Notify('progressbar_off');
                     deferred.resolve(userInfo);
                 }
             );
