@@ -114,6 +114,13 @@ function OneDriveManager() {
             ).success(
                 function (response) {
                     window.external.Notify('progressbar_off');
+
+                    response.data.forEach(function(item) {
+                        if (item.type == 'album') {
+                            item.type = 'folder';
+                        }
+                    });
+
                     deferred.resolve(response.data);
                 });
 
