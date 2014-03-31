@@ -144,7 +144,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.xml" />
+    <Content Include="config.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Images\appbar.back.rest.png" />
     <Content Include="Images\appbar.close.rest.png" />
     <Content Include="Images\appbar.feature.video.rest.png" />
@@ -210,6 +212,10 @@
   <ItemGroup>
     <Compile Include="Plugins\org.apache.cordova.background-download\BackgroundDownload.cs" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Plugins\org.apache.cordova.inappbrowser\InAppBrowser.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="www\cordova.js" />
   </ItemGroup>
@@ -227,10 +233,14 @@
     <Content Include="www\index.html" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="www\indexOld.html" />
+    <Content Include="www\js\index.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="www\js\ngApp.js" />
     <Content Include="www\js\ngOneDriveCtrl.js" />
-    <Content Include="www\js\oneDriveDb.js" />
     <Content Include="www\js\oneDrive.js" />
+    <Content Include="www\js\oneDriveDb.js" />
     <Content Include="www\lib\angular.js" />
     <Content Include="www\lib\bootstarp\css\bootstrap-theme.css" />
     <Content Include="www\lib\bootstarp\css\bootstrap-theme.min.css" />
@@ -242,13 +252,466 @@
     <Content Include="www\lib\bootstrap.css" />
     <Content Include="www\lib\jquery.min.js" />
     <Content Include="www\lib\metro-bootstrap.css" />
+    <Content Include="www\plugins\org.apache.cordova.background-download\.fetch.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\plugin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\App1.jsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\App1_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\css\default.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\default.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\images\smalllogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\images\smalllogo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\images\splashscreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\images\storelogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\js\BackgroundDownloader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\js\backgroundtask.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\js\default.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\js\DownloadOperation.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\js\lib\require.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\windows8\package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\App.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\ApplicationIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\build.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\clean.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\build.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\clean.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\deploy.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\install-device.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\install-emulator.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\list-devices.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\list-emulator-images.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\list-started-emulators.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\log.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\start-emulator.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\lib\target-list.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\log.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\run.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordova\version.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\BrowserMouseHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\CommandFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\Commands\BaseCommand.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\ConfigHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\ConsoleHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\CordovaCommandCall.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\CordovaView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\CordovaView.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\IBrowserDecorator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\ImageExifHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\JSON\JsonHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\MimeTypeMapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\NativeExecution.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\OrientationHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\PluginResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\Plugins\BackgroundDownloader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\ScriptCallback.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\cordovalib\XHRHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\CordovaWP8_3.3.02.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\CordovaWP8_3.3.02.sln" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.back.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.close.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.feature.video.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.next.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.save.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Images\appbar.stop.rest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\MainPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\MainPage.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\Properties\WMAppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\VERSION" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\cordova.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\css\index.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\img\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\js\BackgroundDownloader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\CordovaWP8_3.3.02\www\js\index.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\DownlaodAgent\DownloadAgent.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\DownlaodAgent\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\prototypes\wp8\DownlaodAgent\ScheduledAgent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\src\android\BackgroundDownload.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\src\ios\BackgroundDownload.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\src\ios\BackgroundDownload.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\src\windows8\BackgroundDownloadProxy.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\src\wp\BackgroundDownload.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\test\config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\test\css\index.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\test\img\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\test\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\test\js\index.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.background-download\www\BackgroundDownloader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.background-download\www\BackgroundTransfer.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.background-download\www\DownloadOperation.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.background-download\www\Promise.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\.fetch.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\doc\index.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\package.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\plugin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\RELEASENOTES.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\ContentFilesystem.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\DirectoryManager.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\EncodingException.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\FileExistsException.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\FileHelper.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\Filesystem.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\FileUtils.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\InvalidModificationException.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\LocalFilesystem.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\LocalFilesystemURL.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\NoModificationAllowedException.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\android\TypeMismatchException.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\blackberry10\index.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVAssetLibraryFilesystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVAssetLibraryFilesystem.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVFile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVFile.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVLocalFilesystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ios\CDVLocalFilesystem.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ubuntu\file.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\ubuntu\file.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\windows8\FileProxy.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\src\wp\File.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\HtmlReporter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\HtmlReporterHelpers.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\ReporterView.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\SpecView.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\SuiteView.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\html\TrivialReporter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\jasmine.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\jasmine.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\pages\file.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\test-runner.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\autotest\tests\file.tests.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\cordova-incl.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\main.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\test\master.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\android\FileSystem.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\DirectoryEntry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\DirectoryReader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\Entry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\File.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\FileEntry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\FileReader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\FileSystem.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\fileUtils.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\FileWriter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\requestFileSystem.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\blackberry10\resolveLocalFileSystemURI.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.file\www\DirectoryEntry.js" />
@@ -287,6 +750,12 @@
     <Content Include="www\plugins\org.apache.cordova.file\www\Flags.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\ios\Entry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\ios\FileSystem.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.file\www\LocalFileSystem.js" />
   </ItemGroup>
   <ItemGroup>
@@ -302,7 +771,27 @@
     <Content Include="www\plugins\org.apache.cordova.file\www\resolveLocalFileSystemURI.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\ubuntu\DirectoryEntry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\ubuntu\Entry.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.file\www\ubuntu\FileWriter.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="www\plugins\org.apache.cordova.file\www\wp\FileUploadOptions.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="www\plugins\org.apache.cordova.inappbrowser\www\inappbrowser.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.msopentech.azure-mobile-services\www\MobileServices.Web-1.1.3.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\org.msopentech.azure-mobile-services\www\MobileServices.Web.Ext.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\plugins\wp8.json" />
+  </ItemGroup>
 </Project>

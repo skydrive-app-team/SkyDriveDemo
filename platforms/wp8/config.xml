@@ -6,8 +6,9 @@
     <feature name="File">
         <param name="wp-package" value="File" />
     </feature>
-    <feature name="FileOpening">
-      <param name="wp-package" value="FileOpening" />
+    
+    <feature name="InAppBrowser">
+        <param name="wp-package" value="InAppBrowser" />
     </feature>
     <name>OneDriveDemoApp</name>
     <description>

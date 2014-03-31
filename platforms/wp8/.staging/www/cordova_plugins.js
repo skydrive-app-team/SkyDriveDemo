@@ -19,6 +19,16 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/org.msopentech.azure-mobile-services/www/MobileServices.Web.Ext.js",
+        "id": "org.msopentech.azure-mobile-services.AzureMobileServices.Ext",
+        "runs": true
+    },
+    {
+        "file": "plugins/org.msopentech.azure-mobile-services/www/MobileServices.Web-1.1.3.js",
+        "id": "org.msopentech.azure-mobile-services.AzureMobileServices",
+        "runs": true
+    },
+    {
         "file": "plugins/org.apache.cordova.file/www/DirectoryEntry.js",
         "id": "org.apache.cordova.file.DirectoryEntry",
         "clobbers": [
@@ -146,13 +156,22 @@ module.exports = [
         "merges": [
             "window.FileUploadOptions"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js",
+        "id": "org.apache.cordova.inappbrowser.inappbrowser",
+        "clobbers": [
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
     "org.apache.cordova.background-download": "0.0.1",
-    "org.apache.cordova.file": "1.0.0"
+    "org.msopentech.azure-mobile-services": "0.1.0",
+    "org.apache.cordova.file": "1.0.0",
+    "org.apache.cordova.inappbrowser": "0.3.3"
 }
 // BOTTOM OF METADATA
 });

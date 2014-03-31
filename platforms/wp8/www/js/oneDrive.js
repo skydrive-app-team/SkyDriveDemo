@@ -59,8 +59,8 @@ function OneDriveManager() {
             singOutUrl = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
         };
 
-
     accessToken = getAccessTokenFromURL();
+    console.log(accessToken);
     generateURLs();
 
     return {
