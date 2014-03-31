@@ -57,6 +57,7 @@ function OneDriveManager() {
             userInfoUrl = "https://apis.live.net/v5.0/me/?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
             filesUrlForDirectory = "https://apis.live.net/v5.0/%folderID%?method=GET&interface_method=undefined&pretty=false&return_ssl_resources=false&x_http_live_library=Web%2Fchrome_5.5&suppress_redirects=true&"+accessToken;
             singOutUrl = "http://login.live.com/oauth20_logout.srf?" + accessToken + "&client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
+            signInUrl = "https://login.live.com/oauth20_authorize.srf?client_id=" + clientId + "&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts={0}&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=" + redirectUri;
         };
 
     accessToken = getAccessTokenFromURL();
@@ -95,8 +96,13 @@ function OneDriveManager() {
             generateURLs();
         },
 
-        signOut: function(){
-            location.href=singOutUrl;
+        signOut: function (redirectURL) {
+            var ref = window.open(singOutUrl, '_blank', 'location=no');
+            ref.addEventListener('loadstop', function (e) {
+                location.href = "index.html";
+                ref.close();
+            });
+            return;
             //location.href="https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html";
         },
 
