@@ -152,7 +152,7 @@
         $scope.signOut = oneDriveManager.signOut;
 
         $scope.openFile = function(file){
-            cordova.exec(null, null, 'FileOpening', 'open', [file.localPath]);
+            window.plugins.fileOpener.open(file.localPath);
         };
 
         $scope.onClickDownloadButton = function(file){
