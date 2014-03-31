@@ -11,33 +11,39 @@ using WPCordovaClassLib.Cordova.Commands;
 
 namespace WPCordovaClassLib.Cordova.Commands
 {
-    public class FileOpening : BaseCommand
+    public class FileOpener : BaseCommand
     {
         async public void openFile(string options)
         {
             var optStings = JSON.JsonHelper.Deserialize<string[]>(options);
 
-            string openFile = optStings[0].Replace('/', '\\').Substring(2);
+            string filePath = optStings[0].Replace('/', '\\').Substring(2);
 
-            StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-            StorageFile file = await local.GetFileAsync(openFile);
-
-            if (file != null)
+            try
             {
+
+                StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                StorageFile file = await local.GetFileAsync(filePath);
+
+                if (file == null)
+                {
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "File not found: " + filePath));
+                    return;
+                }
+
                 var success = await Windows.System.Launcher.LaunchFileAsync(file);
 
                 if (success)
                 {
-                    //File launched
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
                 }
                 else
                 {
-                    // File launch failed
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Unable to start the app associated with the following file: " + filePath));
                 }
             }
-            else
-            {
-                // Could not find file
+            catch (Exception ex) {
+                this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, ex.Message));
             }
         }
     }
