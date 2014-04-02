@@ -16,7 +16,7 @@
             dataBase,
             directoryIds = [],
 
-            getFilesByParameter =  function(parameter ,value){
+            getFilesByParameter = function(parameter ,value){
                 return $scope.filesAndFolders.filter(
                     function (obj) {
                         return obj[parameter] === value;
@@ -64,11 +64,9 @@
                     if (fileInfo.type != 'folder'){
                         dataBase.readItem(fileInfo.id, function(fileData){
                             if (!fileData) return;
-                            console.log(JSON.stringify(fileData));
                             var file = getFilesByParameter('id', fileData.id)[0];
                             setFileState(file, fileData.state);
                             file.localPath = fileData.localPath;
-                            console.log(file.name+'  ' +file.startProgress+'    '+file.state);
                             if (!file.startProgress && file.state == PROGRESS_STATE){
                                 downloadFile(file);
                             }
@@ -81,7 +79,6 @@
             downloadFile=function(file){
                 var onSuccess = function(filePath){
                         var fileNew = getFilesByParameter('name', file.name)[0];
-                        console.log('onSuccess ' + fileNew.name);
                         fileNew.startProgress = false;
                         fileNew.localPath = filePath;
                         fileNew.state = DOWNLOADED_STATE;
@@ -94,22 +91,16 @@
                         $scope.$apply();
                     },
                     onError = function(res){
-                        console.log('onError>>>>>>>>>> '+res);
                         var fileNew = getFilesByParameter('name', file.name)[0];
-
                         fileNew.startProgress = false;
                         fileNew.state = NOT_DOWNLOADED_STATE;
                         dataBase.removeItem(fileNew.id);
                         $scope.$apply();
                     },
                     onProgress = function(res){
-                        console.log('onProgress ' + file.name);
-
                         var fileNew = getFilesByParameter('id', file.id)[0];
-
                         fileNew.state = PROGRESS_STATE;
                         fileNew.progress = res;
-
                         $scope.$apply();
                     };
 
@@ -165,10 +156,6 @@
             return strAr[0] + ' ' + strAr[1].split('+',1);
         };
 
-        $scope.generateSize = function(size){
-
-        }
-
         oneDriveManager.loadUserInfo().then(
             function (userInfo) {
                 DbManager.createDB(userInfo.id, "loadState",'id',['state', 'url', 'localPath'], function(db){
@@ -182,7 +169,6 @@
             function (data) {
                 addDownloadState(data);
                 $scope.filesAndFolders = data;
-
                 updateStateOfDb();
             }
         );

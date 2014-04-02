@@ -37,7 +37,6 @@ function OneDriveManager() {
                 createDir = function(i) {
                     if (i < dirArgs.length) {
                         fileSystem.root.getDirectory(tmpPath , {create: true}, function(){
-                            console.log(tmpPath + ' create');
                             if (i < dirArgs.length - 2){
                                 tmpPath += '/' + dirArgs[i + 1];
                                 createDir(i + 1);
@@ -61,7 +60,6 @@ function OneDriveManager() {
         };
 
     accessToken = getAccessTokenFromURL();
-    console.log(accessToken);
     generateURLs();
 
     return {

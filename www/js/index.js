@@ -36,7 +36,6 @@ var app = {
         document.addEventListener("backbutton", function () { navigator.app.exitApp() }, true);
         var ref = window.open("https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts={0}&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html", '_blank', 'location=no');
         ref.addEventListener('loadstart', function (e) {
-            console.log('start: ' + JSON.stringify(e));
             if (e.url.indexOf("access_token=") > 0) {
                 location.href = "indexOld.html" + (e.url.substr(e.url.indexOf("#")).split("&")[0]);
                 ref.close();
