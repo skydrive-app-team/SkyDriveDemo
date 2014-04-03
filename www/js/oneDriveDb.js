@@ -8,17 +8,18 @@
                 return  db.transaction([tableName], "readwrite").objectStore(tableName);
             },
             addItem = function(data, onsuccess, onerror) {
-                var transaction = db.transaction([tableName], "readwrite"),
-                    objectStore = transaction.objectStore(tableName),
-                    request = objectStore.add(data);
-                transaction.onerror = function(err) {
-                    if(!onerror) onerror(err);
-                    replaceItem(data.id, data);
-                };
-                request.onsuccess = onsuccess
-                request.onerror = function(err){
-                    replaceItem(data.id, data);
-                };
+                readItem(data.id, function(fileData){
+                    if (fileData){
+                        replaceItem(data.id,data)
+                    } else {
+                        var transaction = db.transaction([tableName], "readwrite"),
+                            objectStore = transaction.objectStore(tableName),
+                            request = objectStore.add(data);
+                        transaction.onerror = onerror;
+                        request.onsuccess = onsuccess;
+                        request.onerror = onerror;
+                    }
+                });
             },
 
             readItem = function(id, onsuccess){
