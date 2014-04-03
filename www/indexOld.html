@@ -154,17 +154,21 @@
             .items {
                 position: relative;
                 overflow: hidden;
-            }
-
-            .item-div {
-                width: 100%; height: 100%; position: absolute; background-color: yellow;
                 z-index: 1000;
-                opacity: 0.01;
             }
 
-            .item-div:focus ~ div
+
+
+           /* .item-div {
+                width: 100%; height: 100%; position: absolute; background-color: yellow;
+
+                opacity: 0.01;
+            }*/
+
+            div.item:active,
+            div.item:focus
             {
-                transform: perspective(400px) rotate3d(1, -10, 0, 10deg);
+                -webkit-transform: perspective(400px) rotate3d(1, -10, 0, 10deg);
             }
 
             .item-div ~ div {
@@ -191,8 +195,8 @@
                 <!--<a ng-click="toPreFolder()" class="btn btn-default pull-right" role="button" ng-if="directory!='Root'" >&larr; Back</a>-->
                 <h1>{{directory}}</h1>
                 <div class="items" ng-repeat="obj in filesAndFolders " >
-                    <div class="panel panel-body item" ng-click="displayFolder(obj.name)" ng-if="obj.type =='folder'">
-                        <div class="item-div" style="height: 100%; width:100%"></div>
+                    <div tabindex="0" class="panel panel-body item" ng-click="displayFolder(obj.name)" ng-if="obj.type =='folder'">
+                        <!--<div class="item-div" tabindex="1" style="height: 100%; width:100%"></div>-->
                         <div>
                             <div role="button" class="quad pull-left">
                                 <h3>{{obj.count}}</h3>
