@@ -75,7 +75,7 @@
                     }
                 });
             },
-            
+
             downloadFile=function(file){
                 var onSuccess = function(filePath){
                         var fileNew = getFilesByParameter('name', file.name)[0];
@@ -106,7 +106,7 @@
 
                 oneDriveManager.downloadFile(file.source, $scope.directory + '/' + file.name, onSuccess, onError, onProgress);
             },
-            
+
             saveStageToDataBase = function(file){
                 file.state = PROGRESS_STATE;
                 file.startProgress = true;
@@ -118,7 +118,6 @@
                     localPath:file.localPath
                 });
             };
-
         document.addEventListener("backbutton", toPreFolder, true);
         oneDriveManager.setClientId(CLIENT_ID);
         oneDriveManager.setRedirectUri(REDIRECT_URI);
@@ -162,15 +161,17 @@
                     dataBase = db;
                 });
                 $scope.userName = userInfo.name;
+
+                oneDriveManager.loadFilesData().then(
+                    function (data) {
+                        addDownloadState(data);
+                        $scope.filesAndFolders = data;
+                        updateStateOfDb();
+                    }
+                );
             }
         );
 
-        oneDriveManager.loadFilesData().then(
-            function (data) {
-                addDownloadState(data);
-                $scope.filesAndFolders = data;
-                updateStateOfDb();
-            }
-        );
+
     }]);
 })();
