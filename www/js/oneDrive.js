@@ -146,7 +146,7 @@ function OneDriveManager() {
             return deferred.promise;
         },
 
-        downloadFile: function (uriString, fileName,onSuccess , onError, onProgress) {
+        downloadFile: function (uriString, fileName, onSuccess , onError, onProgress) {
             // open target file for download
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
 
@@ -154,7 +154,7 @@ function OneDriveManager() {
 
                     fileSystem.root.getFile(fileName, { create: true }, function (targetFile){
                         var onSuccessThis = function(res){
-                                onSuccess(targetFile.fullPath);
+                                onSuccess(targetFile.toNativeURL());
                             },
                             downloader = new BackgroundTransfer.BackgroundDownloader(),
                             // Create a new download operation.
