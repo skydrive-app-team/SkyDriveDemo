@@ -67,6 +67,7 @@
                             var file = getFilesByParameter('id', fileData.id)[0];
                             setFileState(file, fileData.state);
                             file.localPath = fileData.localPath;
+                            file.source = fileData.url;
                             if (!file.startProgress && file.state == PROGRESS_STATE){
                                 downloadFile(file);
                             }
