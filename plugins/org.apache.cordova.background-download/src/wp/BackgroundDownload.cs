@@ -52,17 +52,17 @@ namespace WPCordovaClassLib.Cordova.Commands
                 var filePath = optStings[1];
 
 
-                if (_activDownloads.ContainsKey(filePath))
+                if (_activDownloads.ContainsKey(uriString))
                 {
-                    return;                   
+                    return;
                 }
     
-                _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
+                _activDownloads.Add(uriString, new Download(uriString, filePath, optStings[2]));
                 
                
                 var requestUri = new Uri(uriString);
 
-                BackgroundTransferRequest transfer = FindTransferByLocalPath(filePath);
+                BackgroundTransferRequest transfer = FindTransferByUri(requestUri);
 
                 if (transfer == null)
                 {
@@ -73,7 +73,7 @@ namespace WPCordovaClassLib.Cordova.Commands
                     transfer = new BackgroundTransferRequest(requestUri, downloadLocation);
 
                     // Tag is used to make sure we run single background transfer for this file
-                    transfer.Tag = filePath;
+                    transfer.Tag = uriString;
 
                     BackgroundTransferService.Add(transfer);
                 }
