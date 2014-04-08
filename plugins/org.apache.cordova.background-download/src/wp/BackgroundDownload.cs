@@ -9,9 +9,9 @@ namespace WPCordovaClassLib.Cordova.Commands
 {
     class Download
     {
-        public string _uriString;
-        public string _filePath;
-        public string _callbackId;
+        private string _uriString;
+        private string _filePath;
+        private string _callbackId;
 
         public string UriString
         {
@@ -54,13 +54,11 @@ namespace WPCordovaClassLib.Cordova.Commands
 
                 if (_activDownloads.ContainsKey(filePath))
                 {
-                    _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
+                    return;                   
                 }
-                else
-                {
-                    _activDownloads.Remove(filePath);
-                    _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
-                }
+    
+                _activDownloads.Add(filePath, new Download(optStings[0], optStings[1], optStings[2]));
+                
                
                 var requestUri = new Uri(uriString);
 
