@@ -1,0 +1,117 @@
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    -ms-touch-action: pan-y;
+    -ms-user-select:none;
+}
+
+html {
+    background: white;
+}
+
+body {
+    font-size: 11pt;
+    font-family:"Segoe WP";
+    letter-spacing: 0.02em;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+h1
+{
+    font-size: 24pt; /* PhoneFontSizeExtraLarge */
+}
+
+h2
+{
+    font-size: 19pt;  /* PhoneFontSizeLarge */
+    font-weight: normal;
+}
+
+h3
+{
+    font-size: 17pt;  /* PhoneFontSizeMediumLarge */
+}
+
+h4
+{
+    font-size: 15pt;  /* PhoneFontSizeMedium */
+    font-weight: normal;
+}
+
+h5
+{
+    font-size: 11pt;  /* PhoneFontSizeNormal */
+}
+
+h6
+{
+    font-size: 10pt;  /* PhoneFontSizeSmall */
+}
+
+.clip {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.panel-body h2,
+.panel-body h3 {
+    margin-top: 0px;
+}
+
+.container.panel, #id.container {
+    height: 100%;
+    color: #3e3e3e;
+    padding: 0px;
+}
+
+.container.user-info {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.quad{
+    background-color: #3e4bff;
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 80px;
+    padding-top: 50px;
+    color: #ffffff;
+}
+
+.quadImg{
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+}
+
+.panel.container h1 {
+    padding-left: 15px;
+}
+
+.items {
+    position: relative;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+div.item:active,
+div.item:focus
+{
+    transform: perspective(400px) rotate3d(1, -10, 0, 10deg);
+    -webkit-transform: perspective(400px) rotate3d(1, -10, 0, 10deg);
+}
+
+.item-div ~ div {
+    position: relative;
+}
+
+.btn-primary {
+    z-index: 1000;
+}
