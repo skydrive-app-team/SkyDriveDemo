@@ -157,7 +157,6 @@ function ngOneDriveCtrl() {
                         var strAr = date.split('T');
                         return strAr[0] + ' ' + strAr[1].split('+',1);
                     };
-                    scope.$apply();
                     oneDriveManager.loadUserInfo().then(
                         function (userInfo) {
                             DbManager.createDB(userInfo.id, "loadState",'id',['state', 'url', 'localPath'], function(db){
