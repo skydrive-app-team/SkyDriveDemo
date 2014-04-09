@@ -29,13 +29,13 @@
             },
 
             removeItem = function(id, onsuccess, onerror) {
-                var request = getObjectStore().delete(id);
-                request.onsuccess = onsuccess;
-                request.onerror = onerror;
+                var request = getObjectStore()["delete"](id);
+                /*request.onsuccess = onsuccess;
+                request.onerror = onerror;*/
             },
 
             replaceItem = function(id, newObj, onsuccess, onerror) {
-                var request = getObjectStore().delete(id);
+                var request = getObjectStore()["delete"](id);
                 request.onsuccess = function() {
                     addItem(newObj, onsuccess, onerror);
                 };
