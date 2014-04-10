@@ -142,7 +142,7 @@ function ngOneDriveCtrl() {
                             }
                         );
                     };
-                    scope.signOut = oneDriveManager.signOut;
+                    scope.signOut = function(){oneDriveManager.signOut()};
 
                     scope.openFile = function(file){
                         window.plugins.fileOpener.open(file.localPath);

@@ -93,15 +93,13 @@ function OneDriveManager(_clientId, _redirectUri) {
         },
 
         signIn: function(onSuccess){
-            //generateURLs();
-            //document.addEventListener("backbutton", function () { navigator.app.exitApp() }, true);
-            var ref = window.open(signInUrl, '_blank', 'location=no'),
+            var inAppBrowser = window.open(signInUrl, '_blank', 'location=no'),
                 deferred = q.defer();
-            ref.addEventListener('loadstart', function (e) {
+            inAppBrowser.addEventListener('loadstart', function (e) {
                 if (e.url.indexOf("access_token=") > 0) {
                     accessToken = getAccessTokenFromURL(e.url);
                     deferred.resolve(accessToken);
-                    ref.close();
+                    inAppBrowser.close();
                 }
             });
 
@@ -109,26 +107,16 @@ function OneDriveManager(_clientId, _redirectUri) {
         },
 
         signOut: function() {
-            //generateURLs();
-            //console.log(singOutUrl);
-            //location.href =  singOutUrl;
-            var ref = window.open("google.com", '_blank', 'location=no');
-            ref.addEventListener('loadstop', function (e) {
-                 /*this.signIn();
-                 ref.close();*/
-            });
-            },
+            var inAppBrowser = window.open(singOutUrl, '_blank', 'location=no');
 
-       /* signOut: function (redirectURL) {
-            var ref = window.open(singOutUrl, '_blank', 'location=no');
-            ref.addEventListener('loadstop', function (e) {
-                location.href = "index.html";
-                ref.close();
+            inAppBrowser.addEventListener('loadstart', function(e){
+                if (e.url.indexOf(redirectUri) === 0) {
+                    inAppBrowser.close();
+                    location.reload();
+                }
             });
-            return;
-            //location.href="https://login.live.com/oauth20_authorize.srf?client_id=0000000048113444&display=touch&locale=en&response_type=token&scope=wl.skydrive&state=redirect_type=auth&display=touch&request_ts=1392886026466&redirect_uri=x-wmapp0%253Awww%252Findex.html&response_method=url&secure_cookie=false&redirect_uri=http://SkyDriveSuperDemo.com/skyDrive/index.html";
         },
-*/
+
         onControllerCreated: function ($http, $q){
             http = $http;
             q = $q;
