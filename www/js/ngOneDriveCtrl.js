@@ -128,21 +128,21 @@ function ngOneDriveCtrl() {
 
                     scope.directory = ROOT_TITLE;
 
-                    scope.displayFolder = function (folderName) {
-                        var folderId = getFilesByParameter('name', folderName)[0].id;
+                    scope.displayFolder = function (folder) {
+                        var folderId = folder.id;
 
                         oneDriveManager.loadFilesData(folderId + '/files')
                             .then(
                             function (data) {
                                 addDownloadState(data);
                                 scope.filesAndFolders = data;
-                                scope.directory += '/' + folderName;
+                                scope.directory += '/' + folder.name;
                                 directoryIds.push(folderId);
                                 updateStateOfDb();
                             }
                         );
                     };
-                    scope.signOut = function(){oneDriveManager.signOut()};
+                    scope.signOut = function () { oneDriveManager.signOut() };
 
                     scope.openFile = function(file){
                         window.plugins.fileOpener.open(file.localPath);
@@ -151,6 +151,37 @@ function ngOneDriveCtrl() {
                     scope.onClickDownloadButton = function(file){
                         saveStageToDataBase(file);
                         downloadFile(file);
+                    };
+
+                    scope.getStyleForType = function (obj){
+                        switch (obj.type) {
+                            case "album": return {'background': "#3e4bff"};
+                            case "audio":
+                                return {
+                                'background-image': obj.picture?"url(" + obj.picture + ")":'url("img/audio.png")',
+                                'background-size': '100%'
+                            };
+                            case "file": return {
+                                'background-image': 'url("img/file.png")',
+                                'background-size': '100%'
+                            };
+                            case "folder": return {'background': "#3e4bff"};
+                            case "photo":
+                                return {
+                                    'background-image': "url(" + obj.images[2].source + ")",
+                                    'background-size': '100%',
+                                    'background-repeat': 'no-repeat'
+                                };
+                            case "video":
+                                return {
+                                    'background-image': "url(" + obj.picture + ")",
+                                    'background-size': '100%'
+                                }
+                            case "notebook": return {
+                                'background-image': 'url("img/oneNote.png")',
+                                'background-size': '100%'
+                            };
+                        }
                     };
 
                     scope.generateDateTime = function(date){

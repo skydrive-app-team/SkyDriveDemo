@@ -72,15 +72,8 @@ h6
 .container.user-info {
     padding-left: 0px;
     padding-right: 0px;
-}
-
-.quad{
-    background-color: #3e4bff;
-    width: 100px;
-    height: 100px;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-right: 10px;
-    color: #ffffff;
 }
 
 .files-count {
@@ -119,4 +112,17 @@ div.item:focus
 
 .btn-primary {
     z-index: 1000;
+}
+
+.quad{
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    margin-right: 10px;
+    color: #ffffff;
+    background-repeat: no-repeat;
+}
+
+.buttonsBar{
+  margin-top: 15px;
 }
