@@ -80,9 +80,14 @@ h6
     height: 100px;
     margin-top: 10px;
     margin-right: 10px;
-    padding-left: 80px;
-    padding-top: 50px;
     color: #ffffff;
+}
+
+.files-count {
+    position: relative;
+    text-align: right;
+    margin-right: 10px;    
+    top: 70%;
 }
 
 .quadImg{
