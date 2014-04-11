@@ -95,6 +95,7 @@ function OneDriveManager(_clientId, _redirectUri) {
         signIn: function(onSuccess){
             var inAppBrowser = window.open(signInUrl, '_blank', 'location=no'),
                 deferred = q.defer();
+            ProgressIndicator.show();
             inAppBrowser.addEventListener('loadstart', function (e) {
                 if (e.url.indexOf("access_token=") > 0) {
                     accessToken = getAccessTokenFromURL(e.url);
