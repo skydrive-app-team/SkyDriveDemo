@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin
+    xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="org.apache.cordova.progress-indicator"
+    version="0.0.1">
+<name>Progress Indicator</name>
+
+<description>Cordova Progress Indicator Plugin</description>
+<license>Apache 2.0</license>
+<keywords>cordova,progress,indicator</keywords>
+<repo>TODO</repo>
+<issue>TODO</issue>
+
+<js-module src="www/ProgressIndicator.js" name="ProgressIndicator">
+   <clobbers target="ProgressIndicator" />
+</js-module>
+<!--
+&lt;!&ndash; android &ndash;&gt;
+<platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="BackgroundDownload" >
+            <param name="android-package" value="org.apache.cordova.backgroundDownload.BackgroundDownload"/>
+        </feature>
+    </config-file>
+    <source-file src="src/android/BackgroundDownload.java" target-dir="src/org/apache/cordova/backgroundDownload" />
+</platform>-->
+
+<!-- wp8 -->
+    <platform name="wp8">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ProgressIndicator">
+                <param name="wp-package" value="ProgressIndicator"/>
+            </feature>
+        </config-file>
+        <source-file src="src/wp/ProgressIndicator.cs" />
+    </platform>
+</plugin>
