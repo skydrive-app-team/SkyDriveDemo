@@ -129,6 +129,8 @@ function ngOneDriveCtrl() {
                     scope.directory = ROOT_TITLE;
 
                     scope.displayFolder = function (folder) {
+                        if (folder.count === undefined) return;
+
                         var folderId = folder.id;
 
                         oneDriveManager.loadFilesData(folderId + '/files')
