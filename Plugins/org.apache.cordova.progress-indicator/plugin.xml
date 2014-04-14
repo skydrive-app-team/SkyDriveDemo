@@ -15,16 +15,16 @@
 <js-module src="www/ProgressIndicator.js" name="ProgressIndicator">
    <clobbers target="ProgressIndicator" />
 </js-module>
-<!--
-&lt;!&ndash; android &ndash;&gt;
+
+<!-- android -->
 <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-        <feature name="BackgroundDownload" >
-            <param name="android-package" value="org.apache.cordova.backgroundDownload.BackgroundDownload"/>
+        <feature name="ProgressIndicator" >
+            <param name="android-package" value="org.apache.cordova.progressIndicator.ProgressIndicator"/>
         </feature>
     </config-file>
-    <source-file src="src/android/BackgroundDownload.java" target-dir="src/org/apache/cordova/backgroundDownload" />
-</platform>-->
+    <source-file src="src/android/ProgressIndicator.java" target-dir="src/org/apache/cordova/progressIndicator" />
+</platform>
 
 <!-- wp8 -->
     <platform name="wp8">
