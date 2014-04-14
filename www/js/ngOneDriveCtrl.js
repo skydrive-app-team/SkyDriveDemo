@@ -34,7 +34,7 @@ function ngOneDriveCtrl() {
         },
 
         toPreFolder = function () {
-            ProgressIndicator.show();
+            ProgressIndicator.show(true);
             if (scope.directory == ROOT_TITLE) {
                 navigator.app.exitApp();
             }
@@ -123,6 +123,7 @@ function ngOneDriveCtrl() {
         run = function() {
             oneDriveManager.signIn().then(
                 function() {
+                    ProgressIndicator.show();
                     oneDriveManager.loadUserInfo().then(
                         function (userInfo) {
                             DbManager.createDB(userInfo.id, "loadState",'id',['state', 'url', 'localPath'], function(db){
@@ -151,11 +152,8 @@ function ngOneDriveCtrl() {
             scope.directory = ROOT_TITLE;
 
             scope.displayFolder = function (folder) {
+                ProgressIndicator.show(true);
                 if (folder.count === undefined) return;
-
-                ProgressIndicator.show();
-
-
                 var folderId = folder.id;
 
                 oneDriveManager.loadFilesData(folderId + '/files')
