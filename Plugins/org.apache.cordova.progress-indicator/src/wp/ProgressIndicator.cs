@@ -20,40 +20,105 @@ namespace WPCordovaClassLib.Cordova.Commands
     public class ProgressIndicator : BaseCommand
     {
         private const string GRID_NAME = "LayoutRoot";
+        private const string CORDOVA_BROWSER_NAME = "CordovaBrowser";
+        
+        ProgressBar progressBar;
 
-        ProgressBar p = new ProgressBar();
-
-        public ProgressIndicator() : base()
+        public void addProgressBar()
         {
-            p.IsIndeterminate = true;
-            p.Visibility = Visibility.Collapsed;
-            PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
-            if (frame != null)
-            {
-                PhoneApplicationPage page = frame.Content as PhoneApplicationPage;
-                if (page != null)
-                {
-                    Grid grid = page.FindName(GRID_NAME) as Grid;
-                    grid.Children.Add(p);
-                }
-            }
+            if (progressBar != null) return;
 
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                progressBar = new ProgressBar();
+                progressBar.IsIndeterminate = true;
+                progressBar.Visibility = Visibility.Visible;
+                PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
+                if (frame != null)
+                {
+                    PhoneApplicationPage page = frame.Content as PhoneApplicationPage;
+                    if (page != null)
+                    {
+                        Grid grid = page.FindName(GRID_NAME) as Grid;
+
+                        grid.Children.Add(progressBar);
+                    }
+                }
+            });
+        }
+
+        private void removeProgressBar()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
+                if (frame != null)
+                {
+                    PhoneApplicationPage page = frame.Content as PhoneApplicationPage;
+                    if (page != null)
+                    {
+                        Grid grid = page.FindName(GRID_NAME) as Grid;
+                        grid.Children.Remove(progressBar);
+                        progressBar = null;
+                    }
+                }
+            });
+        }
+
+        private void displayDisable()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
+                if (frame != null)
+                {
+                    PhoneApplicationPage page = frame.Content as PhoneApplicationPage;
+                    if (page != null)
+                    {
+                        WebBrowser wb = page.FindName(CORDOVA_BROWSER_NAME) as WebBrowser;
+                        wb.IsEnabled = false;
+                    }
+                }
+            });
+        }
+
+        private void setBrowserEnable(bool IsEnabled)
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
+                if (frame != null)
+                {
+                    PhoneApplicationPage page = frame.Content as PhoneApplicationPage;
+                    if (page != null)
+                    {
+                        CordovaView cView = page.FindName("CordovaView") as CordovaView;
+                        if(cView != null)
+                        {
+                            WebBrowser wb = cView.Browser;
+                            wb.IsEnabled = IsEnabled;
+                        }
+                    }
+                }
+            });
         }
 
         public void show(string options)
         {
-            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            var optStings = JSON.JsonHelper.Deserialize<string[]>(options);
+
+            bool tapDisable = Convert.ToBoolean(optStings[0]);
+            if (tapDisable)
             {
-                p.Visibility = Visibility.Visible;
-            });
+                setBrowserEnable(false);
+            }
+            addProgressBar();
         }
 
         public void hide(string options)
         {
-            Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
-                p.Visibility = Visibility.Collapsed;
-            });
+            removeProgressBar();
+            setBrowserEnable(true);
         }
     }
 }
