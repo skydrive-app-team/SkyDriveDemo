@@ -14,7 +14,7 @@ function ngOneDriveCtrl() {
         dataBase,
         directoryIds = [],
 
-        getFilesByParameter = function(parameter ,value){
+        getFilesByParameter = function(parameter, value) {
             return scope.filesAndFolders.filter(
                 function (obj) {
                     return obj[parameter] === value;
@@ -77,8 +77,9 @@ function ngOneDriveCtrl() {
         },
 
         downloadFile=function(file){
-            var onSuccess = function(filePath){
+            var onSuccess = function (filePath) {
                     var fileNew = getFilesByParameter('name', file.name)[0];
+                    fileNew = fileNew?fileNew:file;
                     fileNew.startProgress = false;
                     fileNew.localPath = filePath;
                     fileNew.state = DOWNLOADED_STATE;
