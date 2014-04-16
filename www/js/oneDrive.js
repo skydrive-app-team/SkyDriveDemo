@@ -27,7 +27,7 @@ function OneDriveManager(_clientId, _redirectUri) {
             }
         },
 
-        createDirectoryForPath= function(path, fileSystem){
+        createDirectoryForPath= function(path, fileSystem) {
             var dirArgs = path.split('/'),
                 tmpPath = dirArgs[0],
                 deferred = q.defer(),
@@ -43,9 +43,7 @@ function OneDriveManager(_clientId, _redirectUri) {
                         });
                     }
                 };
-
             createDir(0);
-
             return deferred.promise;
         },
 
@@ -61,38 +59,38 @@ function OneDriveManager(_clientId, _redirectUri) {
     generateURLs();
 
     return {
-        setAccessToken: function(aToken){
+        setAccessToken: function(aToken) {
             accessToken = aToken;
             generateURLs();
         },
 
-        getAccessToken:function(){
+        getAccessToken: function() {
             return accessToken;
         },
 
-        getUserInfoURL: function(){
+        getUserInfoURL: function() {
             return userInfoUrl;
         },
 
-        getClientId: function(){
+        getClientId: function() {
             return clientId;
         },
 
-        setClientId: function(cliId){
+        setClientId: function(cliId) {
             clientId = cliId;
             generateURLs();
         },
 
-        getRedirectUri: function(){
+        getRedirectUri: function() {
             return redirectUri;
         },
 
-        setRedirectUri: function(redUri){
+        setRedirectUri: function(redUri) {
             redirectUri = redUri;
             generateURLs();
         },
 
-        signIn: function(onSuccess){
+        signIn: function(onSuccess) {
             var inAppBrowser = window.open(signInUrl, '_blank', 'location=no'),
                 deferred = q.defer();
             ProgressIndicator.show(true);
@@ -104,6 +102,13 @@ function OneDriveManager(_clientId, _redirectUri) {
                     accessToken = getAccessTokenFromURL(e.url);
                     deferred.resolve(accessToken);
                     inAppBrowser.close();
+                }
+            });
+
+            inAppBrowser.addEventListener('exit', function(e){
+                console.log("exit:");
+                if(!accessToken){
+                    navigator.app.exitApp();
                 }
             });
 
@@ -122,12 +127,12 @@ function OneDriveManager(_clientId, _redirectUri) {
             });
         },
 
-        onControllerCreated: function ($http, $q){
+        onControllerCreated: function ($http, $q) {
             http = $http;
             q = $q;
         },
 
-        loadFilesData : function(request){
+        loadFilesData : function(request) {
             var deferred = q.defer();
             //window.external.Notify('progressbar_on');
             http({
@@ -149,7 +154,7 @@ function OneDriveManager(_clientId, _redirectUri) {
             return deferred.promise;
         },
 
-        loadUserInfo: function(){
+        loadUserInfo: function() {
             generateURLs();
             var deferred = q.defer();
             //window.external.Notify('progressbar_on');
