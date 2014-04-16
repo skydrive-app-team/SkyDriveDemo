@@ -91,6 +91,7 @@ function OneDriveManager(_clientId, _redirectUri) {
         },
 
         signIn: function(onSuccess) {
+            ProgressIndicator.hide();
             var inAppBrowser = window.open(signInUrl, '_blank', 'location=no'),
                 deferred = q.defer();
             ProgressIndicator.show(true);
@@ -121,7 +122,7 @@ function OneDriveManager(_clientId, _redirectUri) {
             inAppBrowser.addEventListener('loadstart', function(e){
                 if (e.url.indexOf(redirectUri) === 0) {
                     inAppBrowser.close();
-                    ProgressIndicator.hide();
+                    //ProgressIndicator.hide();
                     location.reload();
                 }
             });
