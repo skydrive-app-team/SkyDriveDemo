@@ -179,6 +179,8 @@ function ngOneDriveCtrl() {
                 saveStageToDataBase(file);
                 downloadFile(file);
             };
+            
+            scope.toPreFolder = function(){ toPreFolder() };
 
             scope.getStyleForType = function (obj){
                 switch (obj.type) {
