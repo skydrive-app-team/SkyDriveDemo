@@ -26,6 +26,17 @@
     <source-file src="src/android/ProgressIndicator.java" target-dir="src/org/apache/cordova/progressIndicator" />
 </platform>
 
+<!-- ios -->
+<platform name="ios">
+    <config-file target="config.xml" parent="/*">
+        <feature name="ProgressIndicator">
+            <param name="ios-package" value="ProgressIndicator" />
+        </feature>
+    </config-file>
+    <header-file src="src/ios/ProgressIndicator.h" />
+    <source-file src="src/ios/ProgressIndicator.m" />
+</platform>
+
 <!-- wp8 -->
     <platform name="wp8">
         <config-file target="config.xml" parent="/*">
