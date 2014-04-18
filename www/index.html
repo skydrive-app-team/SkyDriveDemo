@@ -14,13 +14,15 @@
 
         <script type="text/javascript" charset="utf-8" src="lib/IndexedDBShim.min.js"></script>
         <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-
-
     </head>
-    <body ng-controller="ngOneDriveCtrl">
+    <body ng-controller="ngOneDriveCtrl"  ontouchstart="" >
         <div class="container user-info">
-            <div>
-                <h3 ng-if="userName!=null"  class="pull-right" >{{userName}}
+            <div ng-if="userName!=null" >
+                <h3 class="pull-left" >
+                    <button type="button" ng-click="toPreFolder()" class="btn btn-primary backButton" role="button" >&larr; Back</button>
+                </h3>
+                <h3 class="pull-right" >
+                    {{userName}}
                     <button type="button" ng-click="signOut()" class="btn btn-primary" role="button" >Sign out</button>
                 </h3>
             </div>
@@ -29,7 +31,7 @@
             <div class="panel container" ng-if="filesAndFolders!=null" >
                 <h1>{{directory}}</h1>
                 <div class="items" ng-repeat="obj in filesAndFolders |  filter: obj.type " >
-                    <div tabindex="0" class="panel panel-body item" ng-click="displayFolder(obj)" >
+                    <div class="panel panel-body item" ng-click="displayFolder(obj)" >
                         <div class="item-div" style="height: 100%; width:100%"></div>
                         <div>
                             <div role="button" class="quad pull-left"  ng-style="getStyleForType(obj)">
