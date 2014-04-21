@@ -30,13 +30,20 @@
 {
     if(self.progressBar != NULL) return;
     BOOL boolValue = [[command.arguments objectAtIndex:0] boolValue];
+    NSString *stringColor = [command.arguments objectAtIndex:2];
+    UIColor *color;
+    NSUInteger red, green, blue;
+    @try {
+        sscanf([stringColor UTF8String], "#%02X%02X%02X", &red, &green, &blue);
+        color = [UIColor colorWithRed:red green:green blue:blue alpha:1];
+    }
+    @catch (NSException * e) {}
 
     self.progressBar = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [self.webView.superview.superview addSubview:self.progressBar];
     self.progressBar.center = self.webView.superview.superview.center;
-    
+    self.progressBar.color = color;
 
-    self.progressBar.color = [UIColor blueColor];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             self.webView.userInteractionEnabled = !boolValue;
