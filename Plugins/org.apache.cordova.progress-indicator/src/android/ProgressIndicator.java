@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout.LayoutParams;
@@ -19,7 +20,7 @@ public class ProgressIndicator extends CordovaPlugin {
      public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
             try {
                 if (action.equals("show")) {
-                    show(args.getBoolean(0), args.getString(1));
+                    show(args.getBoolean(0), args.getString(1), args.getString(2));
                     return true;
                 }
                 if (action.equals("hide")) {
@@ -33,7 +34,7 @@ public class ProgressIndicator extends CordovaPlugin {
             return true;
         }
 
-    private void show(boolean b, String message){
+    private void show(boolean b, String message, String colorStr){
         if (progressInd != null || progressBar != null) return;
         if (b) {
             progressInd = new ProgressDialog(cordova.getActivity());
@@ -42,10 +43,15 @@ public class ProgressIndicator extends CordovaPlugin {
             progressInd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressInd.show();
         } else {
+        	int color = 0;
             progressBar = new ProgressBar(cordova.getActivity(), null, android.R.attr.progressBarStyleLarge);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT );
             lp.gravity = Gravity.CENTER;
             progressBar.setLayoutParams(new LayoutParams(100, 10));
+        	try {
+        		color = Color.parseColor(colorStr);
+        		progressBar.getIndeterminateDrawable().setColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY);
+        	} catch(Exception e) {}
             cordova.getActivity().addContentView(progressBar, lp);
         }
    }
