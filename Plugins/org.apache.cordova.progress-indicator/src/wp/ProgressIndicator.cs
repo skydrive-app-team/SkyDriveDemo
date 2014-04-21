@@ -5,6 +5,7 @@ using Microsoft.Phone.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace WPCordovaClassLib.Cordova.Commands
         
         ProgressBar progressBar;
 
-        public void addProgressBar()
+        public void addProgressBar(String colorStr)
         {
             if (progressBar != null) return;
 
@@ -33,6 +34,20 @@ namespace WPCordovaClassLib.Cordova.Commands
                 progressBar = new ProgressBar();
                 progressBar.IsIndeterminate = true;
                 progressBar.Visibility = Visibility.Visible;
+                try
+                {
+                    var brush = new SolidColorBrush(
+                            Color.FromArgb(
+                                255,
+                                Convert.ToByte(colorStr.Substring(1, 2), 16),
+                                Convert.ToByte(colorStr.Substring(3, 2), 16),
+                                Convert.ToByte(colorStr.Substring(5, 2), 16)
+                            )
+                        );
+                    progressBar.Foreground = brush;
+                }
+                catch { }
+
                 PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
                 if (frame != null)
                 {
@@ -112,7 +127,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             {
                 setBrowserEnable(false);
             }
-            addProgressBar();
+            addProgressBar(optStings[2]);
         }
 
         public void hide(string options)
