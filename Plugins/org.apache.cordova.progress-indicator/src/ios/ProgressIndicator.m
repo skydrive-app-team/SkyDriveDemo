@@ -28,24 +28,35 @@
 
 - (void)show:(CDVInvokedUrlCommand*)command
 {
-    //if(self.progressBar != NULL) return;
-    self.progressBar = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]; [self.webView addSubview:self.progressBar];
-    self.progressBar.center = self.webView.center;
+    if(self.progressBar != NULL) return;
+    BOOL boolValue = [[command.arguments objectAtIndex:0] boolValue];
+
+    self.progressBar = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.webView.superview.superview addSubview:self.progressBar];
+    self.progressBar.center = self.webView.superview.superview.center;
+    
+
+    self.progressBar.color = [UIColor blueColor];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.webView.userInteractionEnabled = !boolValue;
             [self.progressBar startAnimating];
         });
     });
+    
 }
 
 - (void)hide:(CDVInvokedUrlCommand*)command
 {
-    //if(self.progressBar == NULL) return;
+    if(self.progressBar == NULL) return;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressBar stopAnimating];
+            self.webView.userInteractionEnabled = true;
+            self.progressBar = NULL;
         });
     });
+    
 }
 
 @end
