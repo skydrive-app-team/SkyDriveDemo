@@ -33,4 +33,15 @@
         </config-file>
         <source-file src="src/wp/FileOpener.cs" />
     </platform>
+    
+    <platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="FileOpener">
+				<param name="ios-package" value="FileOpener" />
+			</feature>
+		</config-file>
+		<source-file src="src/ios/FileOpener.m" />
+		<header-file src="src/ios/FileOpener.h" />
+	</platform>
 </plugin>
+
