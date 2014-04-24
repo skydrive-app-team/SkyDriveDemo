@@ -348,7 +348,7 @@ public class BackgroundDownload extends CordovaPlugin {
         public void onReceive(Context context, Intent intent) {
 
             DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-
+            
             long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             DownloadManager.Query query = new DownloadManager.Query();
             query.setFilterById(downloadId);
