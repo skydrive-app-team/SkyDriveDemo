@@ -328,13 +328,16 @@ public class BackgroundDownload extends CordovaPlugin {
         Cursor cur = mgr.query(query);
         int idxStatus = cur.getColumnIndex(DownloadManager.COLUMN_STATUS);
         int idxURI = cur.getColumnIndex(DownloadManager.COLUMN_URI);
+        int idxFileName = cur.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
 
         if (cur.moveToFirst()) {
             int status = cur.getInt(idxStatus);
             String uri = cur.getString(idxURI);
+            String fileName = cur.getString(idxFileName);
             Download curDownload = activDownloads.get(uri);
             if (status == DownloadManager.STATUS_SUCCESSFUL) { // TODO review what else we can have here
-                copyTempFileToActualFile(curDownload);
+
+                copyTempFileToActualFile(curDownload, fileName);
                 CleanUp(curDownload);
                 return true;
             }
@@ -364,12 +367,15 @@ public class BackgroundDownload extends CordovaPlugin {
                 query.setFilterById(receivedID);
                 int idxStatus = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 int idxReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+                
+                int idxFileName = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
 
                 if (cursor.moveToFirst()) {
                     int status = cursor.getInt(idxStatus);
                     int reason = cursor.getInt(idxReason);
+                    String fileName = cursor.getString(idxFileName);
                     if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                        copyTempFileToActualFile(curDownload);
+                        copyTempFileToActualFile(curDownload, fileName);
                     } else {
                         curDownload.getCallbackContextDownloadStart().error("Download operation failed with status " + status + " and reason: "    + getUserFriendlyReason(reason));
                     }
@@ -385,8 +391,8 @@ public class BackgroundDownload extends CordovaPlugin {
         }
     };
 
-    public void copyTempFileToActualFile(Download curDownload) {
-        File sourceFile = new File(Uri.parse(curDownload.getTempFilePath()).getPath());
+    public void copyTempFileToActualFile(Download curDownload, String fileName) {
+        File sourceFile = new File(Uri.parse(fileName).getPath());
         File destFile = new File(Uri.parse(curDownload.getFilePath()).getPath());
         if (sourceFile.renameTo(destFile)) {
             curDownload.getCallbackContextDownloadStart().success();
