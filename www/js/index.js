@@ -4,7 +4,5 @@
 var ctrl = ngOneDriveCtrl();
 ctrl.initialize();
 document.addEventListener('deviceready', function() {
-    //ctrl.initialize();
-    //ProgressIndicator.method();
     ctrl.run();
 });

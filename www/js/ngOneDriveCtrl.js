@@ -122,6 +122,7 @@ function ngOneDriveCtrl() {
         },
 
         run = function() {
+            scope.showSignInButton = false;
             oneDriveManager.signIn().then(
                 function() {
                     ProgressIndicator.show();
@@ -142,6 +143,13 @@ function ngOneDriveCtrl() {
                             );
                         }
                     );
+                },
+                function(){
+                    if(navigator.app){
+                        navigator.app.exitApp();
+                    }
+                    ProgressIndicator.hide();
+                    scope.showSignInButton = true;
                 }
             );
         },
@@ -168,6 +176,9 @@ function ngOneDriveCtrl() {
                         ProgressIndicator.hide();
                     }
                 );
+            };
+            scope.StartLogin = function() {
+                run();
             };
             scope.signOut = function () { oneDriveManager.signOut() };
 

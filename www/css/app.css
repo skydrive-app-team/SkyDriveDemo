@@ -139,11 +139,26 @@ div.item:focus
     display: none;
 }
 
+.loginButton
+{
+    width: 160px;
+    height: 60px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -80px;
+}
+
 
 @media screen { @media (min-width: 0px) {
     .backButton
     {
        display:inline;
+    }
+    body
+    {
+        margin-top:25px;
     }
 }}
 
