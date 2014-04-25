@@ -2,8 +2,10 @@ function ngOneDriveCtrl() {
     'use strict';
     var controllerId = 'ngOneDriveCtrl', // Controller name is handy for logging
         ROOT_TITLE = 'OneDrive',
-        CLIENT_ID = "0000000048113444",
-        REDIRECT_URI = "http://skydrivesuperdemo.com/skyDrive/index.html",
+        SKYDRIVE_CLIENT_ID = "0000000048113444",
+        SKYDRIVE_REDIRECT_URI = "http://skydrivesuperdemo.com/skyDrive/index.html",
+        GOOGLEDRIVE_CLIENT_ID = "608994791757-mnhak64khir5gggp6328bbn6tovclmc9.apps.googleusercontent.com",
+        GOOGLEDRIVE_REDIRECT_URI = "https://www.example.com/oauth2callback",
         DOWNLOADED_STATE = 1,
         NOT_DOWNLOADED_STATE = 0,
         PROGRESS_STATE = 2,
@@ -11,8 +13,7 @@ function ngOneDriveCtrl() {
         http,
         q,
         app,
-        oneDriveManager,
-
+        driveManager,
         dataBase,
         directoryIds = [],
 
@@ -43,7 +44,7 @@ function ngOneDriveCtrl() {
             var dirArr = scope.directory.split('/'),
                 directoryToLoad = directoryIds.length - 2 >= 0 ? directoryIds[directoryIds.length - 2] + '/files' : null;
 
-            oneDriveManager.loadFilesData(directoryToLoad).then(
+            driveManager.loadFilesData(directoryToLoad).then(
                 function (data) {
                     addDownloadState(data);
 
@@ -78,9 +79,9 @@ function ngOneDriveCtrl() {
             });
         },
 
-        downloadFile = function(file){
+        downloadFile = function (file) {
             var onSuccess = function (filePath) {
-                    var fileNew = getFilesByParameter('name', file.name)[0];
+                var fileNew = getFilesByParameter('name', file.name)[0];
                     fileNew = fileNew?fileNew:file;
                     fileNew.startProgress = false;
                     fileNew.localPath = filePath;
@@ -93,7 +94,7 @@ function ngOneDriveCtrl() {
                     });
                     scope.$apply();
                 },
-                onError = function(res){
+                onError = function (res) {
                     console.log("Error download: "+res);
                     var fileNew = getFilesByParameter('name', file.name)[0];
                     fileNew.startProgress = false;
@@ -107,8 +108,7 @@ function ngOneDriveCtrl() {
                     fileNew.progress = res;
                     scope.$apply();
                 };
-
-            oneDriveManager.downloadFile(file.source, scope.directory + '/' + file.name, onSuccess, onError, onProgress);
+            driveManager.downloadFile(file.source, scope.directory + '/' + file.name, onSuccess, onError, onProgress);
         },
 
         saveStageToDataBase = function(file){
@@ -123,21 +123,30 @@ function ngOneDriveCtrl() {
             });
         },
 
-        run = function() {
-            oneDriveManager = new OneDriveManager(CLIENT_ID, REDIRECT_URI);
-            oneDriveManager.onControllerCreated(http, q);
+        run = function (storage) {
+
+            switch (storage) {
+                case 'onedrive':
+                    driveManager = new OneDriveManager(SKYDRIVE_CLIENT_ID, SKYDRIVE_REDIRECT_URI);
+                    break;
+
+                case 'googledrive':
+                    driveManager = new GoogleDriveManager(GOOGLEDRIVE_CLIENT_ID, GOOGLEDRIVE_REDIRECT_URI);
+                    break;
+            }
+
+            driveManager.onControllerCreated(http, q);
             scope.showSignInButton = false;
-            oneDriveManager.signIn().then(
-                function() {
+            driveManager.signIn().then(
+                function () {
                     ProgressIndicator.show();
-                    oneDriveManager.loadUserInfo().then(
+                    driveManager.loadUserInfo().then(
                         function (userInfo) {
                             DbManager.createDB(userInfo.id, "loadState",'id',['state', 'url', 'localPath'], function(db){
                                 dataBase = db;
                             });
                             scope.userName = userInfo.name;
-
-                            oneDriveManager.loadFilesData().then(
+                            driveManager.loadFilesData().then(
                                 function (data) {
                                     addDownloadState(data);
                                     scope.filesAndFolders = data;
@@ -148,7 +157,7 @@ function ngOneDriveCtrl() {
                         }
                     );
                 },
-                function(){
+                function (){
                     if(navigator.app){
                         navigator.app.exitApp();
                     }
@@ -184,19 +193,28 @@ function ngOneDriveCtrl() {
                 );
             };
 
-            scope.StartLogin = function() {
-                run();
+            scope.StartLogin = function(storage) {
+                run(storage);
             };
 
             scope.signOut = function () {
-                oneDriveManager.signOut()
+                driveManager.signOut();
             };
 
-            scope.openFile = function(file){
-                window.plugins.fileOpener.open(file.localPath);
+            scope.openFile = function (file) {
+
+                if (file.state == 1) {
+                    window.plugins.fileOpener.open(file.localPath);
+                    return;
+                }
+
+                if (file.embedLink) {
+                    window.open(file.embedLink + '?' + driveManager.getAccessToken(), '_blank', 'location=no');
+                    return;
+                }
             };
 
-            scope.onClickDownloadButton = function(file){
+            scope.onClickDownloadButton = function (file) {
                 saveStageToDataBase(file);
                 downloadFile(file);
             };
@@ -228,7 +246,7 @@ function ngOneDriveCtrl() {
                         return {
                             'background-image': "url(" + obj.picture + ")",
                             'background-size': '100%'
-                        }
+                        };
                     case "notebook": return {
                         'background-image': 'url("img/oneNote.png")',
                         'background-size': '100%'
@@ -247,9 +265,9 @@ function ngOneDriveCtrl() {
             // Define the controller on the module.
             // Inject the dependencies.
             // Point to the controller definition function.
-            app = angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q' , onControllerCreated]);
+            app = angular.module('app', []).controller(controllerId, ['$scope', '$http', '$q', onControllerCreated]);
         },
 
         run: run
-    }
-};
+    };
+}
