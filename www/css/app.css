@@ -136,18 +136,22 @@ div.item:focus
 
 .backButton
 {
-    display: none;
+   display: none;
 }
 
-.loginButton
-{
+.loginPnel {
     width: 160px;
-    height: 60px;
+    height: 150px;
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-top: -30px;
+    margin-top: -75px;
     margin-left: -80px;
+}
+.loginButton {
+    width: 160px;
+    margin-bottom: 15px;
+    height: 60px;
 }
 
 .iOS .backButton

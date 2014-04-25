@@ -8,8 +8,10 @@ function ngOneDriveCtrl() {
         NOT_DOWNLOADED_STATE = 0,
         PROGRESS_STATE = 2,
         scope,
+        http,
+        q,
         app,
-        oneDriveManager = new OneDriveManager(CLIENT_ID, REDIRECT_URI),
+        oneDriveManager,
 
         dataBase,
         directoryIds = [],
@@ -58,7 +60,7 @@ function ngOneDriveCtrl() {
             );
         },
 
-        updateStateOfDb = function(){
+        updateStateOfDb = function() {
             scope.filesAndFolders.forEach(function(fileInfo){
                 if (fileInfo.type != 'folder'){
                     dataBase.readItem(fileInfo.id, function(fileData){
@@ -76,7 +78,7 @@ function ngOneDriveCtrl() {
             });
         },
 
-        downloadFile=function(file){
+        downloadFile = function(file){
             var onSuccess = function (filePath) {
                     var fileNew = getFilesByParameter('name', file.name)[0];
                     fileNew = fileNew?fileNew:file;
@@ -122,6 +124,8 @@ function ngOneDriveCtrl() {
         },
 
         run = function() {
+            oneDriveManager = new OneDriveManager(CLIENT_ID, REDIRECT_URI);
+            oneDriveManager.onControllerCreated(http, q);
             scope.showSignInButton = false;
             oneDriveManager.signIn().then(
                 function() {
@@ -156,9 +160,11 @@ function ngOneDriveCtrl() {
         
         onControllerCreated = function ($scope, $http, $q) {
             scope = $scope;
-            oneDriveManager.onControllerCreated($http, $q);
+            http=$http;
+            q=$q;
             document.addEventListener("backbutton", toPreFolder, true);
             scope.directory = ROOT_TITLE;
+            scope.showSignInButton = true;
 
             scope.displayFolder = function (folder) {
                 if (folder.count === undefined) return;
@@ -177,10 +183,14 @@ function ngOneDriveCtrl() {
                     }
                 );
             };
+
             scope.StartLogin = function() {
                 run();
             };
-            scope.signOut = function () { oneDriveManager.signOut() };
+
+            scope.signOut = function () {
+                oneDriveManager.signOut()
+            };
 
             scope.openFile = function(file){
                 window.plugins.fileOpener.open(file.localPath);
@@ -191,7 +201,9 @@ function ngOneDriveCtrl() {
                 downloadFile(file);
             };
             
-            scope.toPreFolder = function(){ toPreFolder() };
+            scope.toPreFolder = function(){
+                toPreFolder();
+            };
 
             scope.getStyleForType = function (obj){
                 switch (obj.type) {
@@ -228,8 +240,8 @@ function ngOneDriveCtrl() {
                 var strAr = date.split('T');
                 return strAr[0] + ' ' + strAr[1].split('+',1);
             };
+            console.log('ennnnn');
         };
-
     return {
         initialize: function() {
             // Define the controller on the module.

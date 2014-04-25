@@ -16,7 +16,10 @@
         <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     </head>
     <body ng-controller="ngOneDriveCtrl"  ontouchstart="" >
-        <button ng-if='showSignInButton' type="button" ng-click="StartLogin()" class="btn btn-primary loginButton" role="button" >SignIn</button>
+        <div ng-if='showSignInButton' class="loginPnel" >
+            <button type="button" ng-click="StartLogin()" class="btn btn-primary loginButton" role="button" >OneDrive</button>
+            <button type="button" ng-click="StartLogin()" class="btn btn-primary loginButton" role="button" >GoogleDrive</button>
+        </div>
         <div class="container user-info">
             <div ng-if="userName!=null" >
                 <h3 class="pull-left" >
